@@ -1,0 +1,529 @@
+.checkout-bg {
+    background-color: #f6f6f9;
+    min-height: 100vh;
+    padding: 40px 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.checkout-container-v2 {
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.checkout-header-v2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.checkout-header-v2 h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+}
+
+.checkout-header-v2 p {
+    color: #888;
+    font-size: 14px;
+}
+
+/* CARDS */
+.checkout-card-v2 {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    border: 1px solid #eaeaea;
+    margin-bottom: 20px;
+}
+
+.card-title-v2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #fcfcfc;
+    padding-bottom: 15px;
+}
+
+.step-icon {
+    background: #000;
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.card-title-v2 h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* FORM FIELDS */
+.input-grid-v2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.street-row-v2 {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.field-v2 {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.field-v2 label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.field-v2 input {
+    padding: 11px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s;
+    background: #fafafa;
+}
+
+.field-v2 input:focus {
+    background: #fff;
+    border-color: #000;
+}
+
+.postal-code { width: 30%; }
+
+/* LIGHT ORDER REVIEW */
+.checkout-card-v2.light-version {
+    padding: 20px;
+}
+
+.checkout-items-review {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-item-text-light {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.review-item-text-light:last-child {
+    border-bottom: none;
+}
+
+.review-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.review-name-light {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.review-qty-light {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.review-details-light {
+    font-size: 12px;
+    color: #bbb;
+    margin: 2px 0 0 0;
+}
+
+.review-price-light {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111;
+}
+
+/* FINAL SUMMARY SECTION */
+.checkout-summary-v2 {
+    background: transparent;
+    border-top: 1px solid #eaeaea;
+    padding: 20px 20px;
+    margin-top: 10px;
+    background-color: #fff;
+    border-radius: 12px;
+}
+
+.s-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #777;
+}
+
+.s-line.total-v2 {
+    margin-top: 12px;
+    padding-top: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+    border-top: none;
+}
+
+.free-text {
+    color: #2e7d32;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+.confirm-btn-v2 {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    padding: 16px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 25px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.confirm-btn-v2:hover {
+    background: #333;
+}
+
+.loader-full {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #888;
+}
+
+@media (max-width: 600px) {
+    .input-grid-v2, .street-row-v2 {
+        grid-template-columns: 1fr !important;
+    }
+    .postal-code { width: 100%; }
+}
+
+/* Payment Section Styles */
+.payment-method-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px;
+  border: 2px solid #000; /* Чорна рамка підкреслює активний вибір */
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.payment-method-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-weight: 600;
+}
+
+.card-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.card-icons img {
+  height: 22px;
+  width: auto;
+}
+
+/* Review Section Fixes */
+.checkout-items-review {
+  padding: 10px 0;
+}
+
+.review-item-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.review-item-text:last-child {
+  border-bottom: none;
+}
+
+.review-name {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.review-qty-tag {
+  color: #888;
+  font-size: 0.9rem;
+  margin-left: 5px;
+}
+
+.review-details {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 4px 0 0 0;
+}
+
+.review-price {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Footer Badge */
+.secure-payment-badge {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.secure-payment-badge p {
+  font-size: 11px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.badge-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  opacity: 0.6;
+}
+
+.badge-icons img {
+  height: 20px;
+}
+
+.payment-grid-v2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.payment-item-v2 {
+  border: 2px solid #eee;
+  border-radius: 12px;
+  padding: 20px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-item-v2:hover {
+  border-color: #ccc;
+}
+
+.payment-item-v2.active {
+  border-color: #000;
+  background-color: #fcfcfc;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.payment-item-v2 img {
+  height: 24px;
+  margin-bottom: 10px;
+}
+
+.payment-icon-wrapper {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.payment-name {
+  display: block;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.payment-sub {
+  font-size: 11px;
+  color: #888;
+  margin: 0;
+}
+
+.payment-info-notice {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #000;
+  margin-top: 10px;
+}
+
+.payment-info-notice p {
+  margin: 0;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.secure-note {
+  text-align: center;
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 15px;
+}
+
+.form-group.error {
+    border-left: 3px solid #dc2626;
+    padding-left: 12px;
+    transition: all 0.2s ease;
+}
+
+.form-group.error .input-wrapper input {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.form-group.error label {
+    color: #dc2626;
+    font-weight: 500;
+}
+
+
+.field-v2.error input {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.field-v2.error label {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* Оверлей (задній фон) */
+.success-screen-v2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Контентна частина повідомлення */
+.success-message {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 90%;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Коли додається клас .show (або просто при рендері) */
+.success-message.show {
+  transform: translateY(0);
+}
+
+/* Кругла іконка з галочкою */
+.success-icon {
+  width: 70px;
+  height: 70px;
+  background: #4caf50;
+  color: white;
+  font-size: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+  animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s both;
+}
+
+.success-message h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.success-message p {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+/* Анімації */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Адаптація кнопки (якщо вона ще не стилізована) */
+.save-btn-custom {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.save-btn-custom:hover {
+  background: #333;
+}

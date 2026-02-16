@@ -1,0 +1,41 @@
+.main{}
+
+.overNav, .slideShow{
+  display: flex;
+  background-color: rgb(237, 237, 237);
+  padding: 5px 100px;
+  gap: 20px;
+  font-size: 14px;
+}
+
+.overNav{
+  text-align: right;
+}
+
+.navigation, span, .logo{
+    font-weight: bold;
+    font-size: 20px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    background-color: rgb(255, 255, 255);
+}
+
+.logo{
+  padding-left: 20px;
+}
+.navigation{
+  padding-right: 20px;
+}
+
+span{
+  gap: 20px;
+}
+
+.fonts{
+  justify-content: center; 
+}
+

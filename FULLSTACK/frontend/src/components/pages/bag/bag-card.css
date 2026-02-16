@@ -1,0 +1,193 @@
+
+
+.card-img-wrapper1{
+  width: 250px;       
+  height: 250px;     
+}
+
+
+.card-link {
+  text-decoration: none;
+  color: black; 
+}
+
+.card1 {  
+  overflow: hidden;
+  display: flex;
+  width: 700px;
+  height: 170px;
+  text-align: right;
+  margin-bottom: 10px;
+
+
+  p{
+    font-weight: bold;
+    font-size: 12px;
+    margin: 0px 10px 0px;
+  }
+
+   .info{
+    width: 100%;
+
+    
+
+    button{
+      font-weight: bold;
+      border: 1px solid #f4f4f4;
+      background-color: rgb(255, 255, 255);
+      cursor: pointer;
+    }
+     button:hover{
+      border: 1px solid #f4f4f4;
+      background-color: rgb(236, 236, 236);
+      transition-duration: 0.3s;
+      cursor: pointer;
+    }
+    .value{
+      width: 40px;
+      height: 30px;
+    }
+
+    .trash{
+      width: 40px;
+      height: 30px;
+    }
+  }
+}
+#type {
+
+    font-size: 15px;
+     color: #ff7f4d;
+      text-align: left;
+}
+
+
+#variable{
+    color: rgba(0, 0, 0, 0.418);
+}
+
+.card-img1 {
+   width: 100%;       
+  object-fit:cover;
+  overflow: hidden;
+}
+
+.card-img-wrapper {
+  width: 100%;       
+  height: 340px;     
+  overflow: hidden;  
+}
+
+.card-title1 {
+  text-align: left;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 8px 5px 0 ;
+}
+
+.arrived{
+color: black;
+}
+
+.select-size{
+      display: flex;
+      justify-content: center;
+      background-color: rgb(255, 255, 255);
+      align-items: center;
+      font-size: 20px;
+      padding: 10px;
+      max-width:50px;
+      width: 50px;
+    }
+
+    /* Контейнер всієї правої колонки */
+.right-colon {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 0;
+  top: 0;
+  background-color: #fff;
+  width: 400px;
+  height: 100vh;
+  padding: 40px 30px;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.02); /* Дуже легка тінь замість рамок */
+  border-left: 1px solid #f0f0f0;
+  z-index: 1000;
+}
+
+/* Оновлений Summary Box */
+.summary-box-v2 {
+  width: 100%;
+}
+
+.summary-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: #555;
+}
+
+.shipping-free {
+  color: #28a745; /* Зелений колір для безкоштовної доставки */
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.summary-divider {
+  height: 1px;
+  background-color: #f0f0f0;
+  margin: 20px 0;
+}
+
+.total-row {
+  font-size: 18px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 30px;
+}
+
+.total-amount {
+  font-size: 22px;
+}
+
+/* Сучасна кнопка */
+.checkout-action-btn {
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 18px;
+  border-radius: 12px; /* М'якший радіус замість 30px або 20px */
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.checkout-action-btn:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.checkout-action-btn:active {
+  transform: translateY(0);
+}
+
+.summary-note {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 15px;
+}

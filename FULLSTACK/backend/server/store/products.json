@@ -1,0 +1,250 @@
+[
+  {
+    "id": 1,
+    "tovarName": "Nike Victory Tour 4 x Eastside Golf",
+    "tovarClass": "Golf Shoes",
+    "color": "blue",
+    "tovarPrice": 200,
+    "productImg": {
+      "1": "https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco/83a8294d-258f-4a32-b2e1-3e5383e4ff12/VICTORY+TOUR+4+NRG.png"
+    },
+    "reviews": [
+      {
+        "userId": "Rfkxf8QIJraanGwy9zCXxusFcko1",
+        "user": "asdasdasdasd",
+        "comment": "/* Оновлена палітра для профілю */ :root {   --main-black: #000000;   --main-grey: #f5f5f5;   --main-dark-grey: #757575;   --main-white: #ffffff;   --accent-orange: #ff7f4d; /* Ваш фірмовий колір */ }  .preview-price {     font-size: 12px;     color: var(--accent-orange); /* Замість зеленого - ваш помаранчевий */     margin: 0;     font-weight: 600;     text-transform: uppercase; }  .review-history-item {     border: 1px solid var(--main-grey);     background: var(--main-white);     border-radius: 0; /* Для більш сучасного \"гострого\" стилю одягу */ }  .review-history-item:hover {     border-color: var(--main-black); }  .tab-btn.active::after {     background: var(--accent-orange); /* Акцентна лінія вашого кольору */ }  .shop-now-btn {     background: var(--main-black);     color: var(--main-white);     border: 1px solid var(--main-black);     transition: 0.3s; }  .shop-now-btn:hover {     background: var(--main-white);     color: var(--main-black); }",
+        "rating": 5,
+        "date": "2026-01-26T01:27:18.613Z"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "tovarName": "Nike Tech Boreas",
+    "tovarClass": "Men's Oversized Hoodie",
+    "color": "Thunder Blue/Obsidian/Black",
+    "tovarPrice": 195,
+    "productImg": {
+      "1": "https://static.nike.com/a/images/t_web_pdp_936_v2/f_auto/74aafcec-a44d-4804-a77e-52393fd2ecca/M+NK+TCH+TF+BOREAS+PO+HOODIE.png",
+      "2": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/54343500-f05d-4065-9df0-3b87b101bebe/M+NK+TCH+TF+BOREAS+PO+HOODIE.png",
+      "3": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/2b38dd78-db88-4dfb-8184-d48dfa94c4e9/M+NK+TCH+TF+BOREAS+PO+HOODIE.png",
+      "4": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/5e9c7008-7f03-48dc-933e-fc6d4c4fdaf1/M+NK+TCH+TF+BOREAS+PO+HOODIE.png",
+      "5": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/35861d13-628c-4604-a51c-d11fd97fca5d/M+NK+TCH+TF+BOREAS+PO+HOODIE.png",
+      "6": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/10cd902a-4be9-41e9-9ddb-3ababbbfde83/M+NK+TCH+TF+BOREAS+PO+HOODIE.png"
+    },
+    "size": {
+      "XS": false,
+      "S": true,
+      "M": false,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    },
+    "description": "Armour for unpredictable conditions, this roomy, super-warm hoodie is built for taking on the city. It's engineered to stand up to the elements with heavy-duty fleece fabric, secure storage and a hood with built-in gaiter.",
+    "reviews": []
+  },
+  {
+    "id": 3,
+    "tovarName": "Nike ACG",
+    "tovarClass": "Men's Long-Sleeve T-Shirt",
+    "color": "white",
+    "tovarPrice": 60,
+    "productImg": {
+      "1": "https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/452d9662-97d7-41e7-958b-7597ea73bd17/M+ACG+TEE+LS+LAVA+FLOW.png"
+    },
+    "size": {
+      "XS": false,
+      "S": true,
+      "M": true,
+      "L": false,
+      "XL": false,
+      "XXL": false
+    }
+  },
+  {
+    "id": 4,
+    "tovarName": "Nike Sportswear Phoenix Fleece",
+    "tovarClass": "Women's Over-Oversized Crew-Neck Sweatshirt",
+    "color": "Light Medium Blue/Sail",
+    "tovarPrice": 75,
+    "productImg": {
+      "1": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/82084ee2-e038-4ca2-8e57-ea00e913ce30/W+NSW+PHNX+FLC+OOS+CREW.png",
+      "2": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/c4746038-8384-4a93-8dd6-70f957a37970/W+NSW+PHNX+FLC+OOS+CREW.png",
+      "3": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/42aa3230-0c99-465f-b1bc-80b6e6e0be9d/W+NSW+PHNX+FLC+OOS+CREW.png"
+    },
+    "size": {
+      "XS": true,
+      "S": false,
+      "M": false,
+      "L": true,
+      "XL": true,
+      "XXL": true
+    },
+    "description": "Grounded in style, comfort and versatility, meet our take on luxury loungewear. Our roomiest fit paired with exaggerated details (like the oversized pocket and taller ribbing) ensures this sweatshirt is anything but basic. All that's left to decide is whether to style it with the matching shorts or other pieces from your wardrobe.",
+    "reviews": []
+  },
+  {
+    "id": 5,
+    "tovarName": "Nike Sportswear Phoenix Fleece",
+    "tovarClass": "Women's High-Waisted Oversized Sweatpants",
+    "color": "Playful Pink/Sail",
+    "tovarPrice": 70,
+    "productImg": {
+      "1": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/9a199642-97de-458a-a061-b98259c281ee/W+NSW+PHNX+FLC+HR+OS+PANT+2.png",
+      "2": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/d25be267-e5a1-400f-bbfd-ea979fd7b279/W+NSW+PHNX+FLC+HR+OS+PANT+2.png",
+      "3": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/d3cf35fe-3f6b-48d9-8e7c-fa9030b51421/W+NSW+PHNX+FLC+HR+OS+PANT+2.png",
+      "4": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/817f75ed-01cd-47ff-9e80-1eb7ec419ec3/W+NSW+PHNX+FLC+HR+OS+PANT+2.png",
+      "5": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/42817e3c-a07b-4bd7-a3ae-63a8731f8c7f/W+NSW+PHNX+FLC+HR+OS+PANT+2.png"
+    },
+    "size": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": false,
+      "XXL": true
+    },
+    "description": "Grounded in style, comfort and versatility, meet our take on luxury loungewear. Whether you're running errands or rewatching your favorite show, these midweight fleece sweats feel extra soft on the inside to help keep you cozy. The oversized fit is intended to sit high on your hips for comfort and a stay-put feel.",
+    "reviews": [
+      {
+        "userId": "Rfkxf8QIJraanGwy9zCXxusFcko1",
+        "user": "asdasdasdasd",
+        "comment": "чудовий лук",
+        "rating": 1,
+        "date": "2026-01-26T01:03:34.001Z"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "tovarName": "Nike Sportswear",
+    "tovarClass": "Men's T-Shirt",
+    "color": "Off Noir",
+    "tovarPrice": 65,
+    "productImg": {
+      "1": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/bb107f61-aff4-49e9-8d1e-5bd73ebe0052/M+NSW+SS+BOXY+TEE+NIRT.png",
+      "2": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/381f7be4-b7f9-413d-8983-c039a20d31ac/M+NSW+SS+BOXY+TEE+NIRT.png",
+      "3": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/1e54ae45-cd9b-45c9-b713-325e9a67af70/M+NSW+SS+BOXY+TEE+NIRT.png",
+      "4": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/0d0440d9-9763-4a6d-9886-e3b97abefd90/M+NSW+SS+BOXY+TEE+NIRT.png",
+      "5": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/c8c991d0-e986-420f-848a-107450294aae/M+NSW+SS+BOXY+TEE+NIRT.png",
+      "6": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/870bc130-9ec4-49ed-97d5-73c0c482d01d/M+NSW+SS+BOXY+TEE+NIRT.png"
+    },
+    "size": {
+      "XS": true,
+      "S": true,
+      "M": true,
+      "L": true,
+      "XL": false,
+      "XXL": true
+    },
+    "description": "Clean and classic, this loose fit tee is made from soft, midweight cotton for durable, daily comfort.",
+    "reviews": []
+  },
+  {
+    "id": 7,
+    "tovarName": "Jordan",
+    "tovarClass": "Men's Oversized Reissue T-Shirt",
+    "color": "Black",
+    "tovarPrice": 50,
+    "productImg": {
+      "1": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/40ad93e2-b584-4fe5-98e4-1d3eccc647ac/M+J+REISSUE+OVSZ+SS+CREW+CLD.png",
+      "2": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/2b6ae8df-cd5d-4f1e-a5db-179c0b69e4e2/M+J+REISSUE+OVSZ+SS+CREW+CLD.png",
+      "3": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/2b23767b-29ea-4e66-b0c8-e305298131e4/M+J+REISSUE+OVSZ+SS+CREW+CLD.png",
+      "4": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/d7a2643b-033f-403c-a4c5-b4810e85d7d4/M+J+REISSUE+OVSZ+SS+CREW+CLD.png",
+      "5": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/b81cc22c-2143-421f-881e-48bdfdef779a/M+J+REISSUE+OVSZ+SS+CREW+CLD.png",
+      "6": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/95c8ff16-2055-4966-80f8-030882b8d1ea/M+J+REISSUE+OVSZ+SS+CREW+CLD.png"
+    },
+    "size": {
+      "XS": true,
+      "S": false,
+      "M": true,
+      "L": false,
+      "XL": false,
+      "XXL": false
+    },
+    "description": "Heavyweight cotton gives this baggy tee a structured look and feel. Throw in some retro-inspired graphics and you've got yourself an absolute winner.",
+    "reviews": [
+      {
+        "userId": "ubbSRB1dNpZyfvTCpHnfYd9cSWv1",
+        "user": "2",
+        "comment": "фівфівфв",
+        "rating": 4,
+        "date": "2026-01-28T19:43:29.085Z"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "tovarName": "Jordan Brooklyn Fleece",
+    "tovarClass": "Men's Graphic Pullover Hoodie",
+    "color": "Black/White",
+    "tovarPrice": 75,
+    "productImg": {
+      "1": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/6d869b7c-7909-4c47-8923-0d695e4301a4/M+J+BRK+GFX+PO+HD.png",
+      "2": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/77cbebf1-490a-4300-b306-06ce7cff0f60/M+J+BRK+GFX+PO+HD.png",
+      "3": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/183c65f3-5379-41eb-95ef-c94c7658b175/M+J+BRK+GFX+PO+HD.png",
+      "4": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/51cae8e7-f83b-463d-bb89-2899fd2d7f69/M+J+BRK+GFX+PO+HD.png",
+      "5": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/c27d2a39-ba98-4a0f-93be-456a45b5e863/M+J+BRK+GFX+PO+HD.png",
+      "6": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/e363eda9-6e98-4292-9b1c-6d8f5b1d88f8/M+J+BRK+GFX+PO+HD.png"
+    },
+    "size": {
+      "XS": false,
+      "S": true,
+      "M": false,
+      "L": false,
+      "XL": false,
+      "XXL": false
+    },
+    "description": "Meet your new lounge-ready staple. Made from midweight fleece that's brushed soft on the inside, this baggy hoodie is always ready to offer you cozy comfort.",
+    "reviews": [
+      {
+        "userId": "Rfkxf8QIJraanGwy9zCXxusFcko1",
+        "user": "asdasdasdasd",
+        "comment": "take from me that fucking dump",
+        "rating": 3,
+        "date": "2026-01-26T01:01:21.813Z"
+      },
+      {
+        "userId": "ubbSRB1dNpZyfvTCpHnfYd9cSWv1",
+        "user": "2",
+        "comment": "asdasdassdasdasdsadasd",
+        "rating": 1,
+        "date": "2026-01-28T18:52:24.591Z"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "tovarName": "Jordan Brooklyn Fleece",
+    "tovarClass": "Men's Graphic Pullover Hoodie",
+    "color": "Gym Red/White",
+    "tovarPrice": 75,
+    "productImg": {
+      "1": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/c31c8863-e056-4bbd-8d81-5a309844f692/M+J+BRK+GFX+PO+HD.png",
+      "2": "http://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/72527d3a-bdb5-45c6-8f17-a4e639e1fb24/M+J+BRK+GFX+PO+HD.png",
+      "3": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/28de70bd-caa5-44fa-9276-1b4e52cc50a9/M+J+BRK+GFX+PO+HD.png",
+      "4": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/dcbe1fbe-60c3-470a-b181-daa22288e508/M+J+BRK+GFX+PO+HD.png",
+      "5": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/95451818-5730-4ed4-9d2d-446164da4213/M+J+BRK+GFX+PO+HD.png",
+      "6": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/430117e4-6a57-4dfc-b95c-db411deda8f3/M+J+BRK+GFX+PO+HD.png",
+      "7": "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/22b302e6-5bbb-4df4-81f7-d819d16583cd/M+J+BRK+GFX+PO+HD.png"
+    },
+    "size": {
+      "XS": false,
+      "S": true,
+      "M": true,
+      "L": false,
+      "XL": true,
+      "XXL": false
+    },
+    "description": "Meet your new lounge-ready staple. Made from midweight fleece that's brushed soft on the inside, this baggy hoodie is always ready to offer you cozy comfort.",
+    "reviews": [
+      {
+        "userId": "Rfkxf8QIJraanGwy9zCXxusFcko1",
+        "user": "asdasdasdasd",
+        "comment": "avesome",
+        "rating": 5,
+        "date": "2026-01-26T01:00:04.511Z"
+      }
+    ]
+  }
+]

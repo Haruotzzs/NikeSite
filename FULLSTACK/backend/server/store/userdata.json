@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "username": "",
+    "email": "user1@example.com",
+    "password": "$2b$10$NnNk9vHuQxzuChK3izurx.VrVtYZXoLGRmXR1Ps2atyKSsMq7uvIS",
+    "bag": []
+  },
+  {
+    "id": 2,
+    "username": "test",
+    "email": "test@mail.com",
+    "password": "$2b$10$q8ECJKuOEpEBfN1kW07j0OkSQ34TI/7eGDusSeICaDkGiX5EOVagC",
+    "bag": []
+  }
+]

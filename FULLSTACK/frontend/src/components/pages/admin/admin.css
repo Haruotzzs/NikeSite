@@ -1,0 +1,684 @@
+/* Sidebar Styles */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #fdfdfd;
+}
+
+.welcome-section {
+  margin: 20px;
+}
+.admin-sidebar {
+  width: 260px;
+  background: #1e1e2d;
+  color: #a2a3b7;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  z-index: 100;
+}
+
+.sidebar-brand {
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 35px;
+  height: 35px;
+  background: #6366f1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.sidebar-nav {
+  padding: 0 15px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  color: #a2a3b7;
+  text-decoration: none;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  transition: 0.3s;
+}
+
+.nav-item:hover, .nav-item.active {
+  background: rgba(255,255,255, 0.05);
+  color: white;
+}
+
+.nav-item.active {
+  background: #6366f1;
+}
+
+/* Main Area Styles */
+.admin-main {
+  flex: 1;
+  margin-left: 260px; /* Відступ для сайдбару */
+  background: #f4f7fe;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 15px 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: #f4f7fe;
+  padding: 8px 15px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.search-bar input {
+  border: none;
+  background: transparent;
+  outline: none;
+  margin-left: 10px;
+  width: 100%;
+}
+
+/* New Stat Cards */
+.stat-card-v2 {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon.blue { background: #e0e7ff; color: #6366f1; }
+.stat-icon.green { background: #dcfce7; color: #22c55e; }
+.stat-icon.purple { background: #f3e8ff; color: #a855f7; }
+.stat-icon.orange { background: #ffedd5; color: #f97316; }
+
+.action-card {
+  cursor: pointer;
+  border: 2px dashed #e2e8f0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.action-card:hover { border-color: #6366f1; }
+
+/* Custom Table */
+.custom-table thead th {
+  background: #f8fafc;
+  color: #64748b;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  padding: 15px;
+}
+
+.custom-table td {
+  padding: 15px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.badge-status {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.badge-status.new { background: #e0f2fe; color: #0284c7; }
+
+/* --- Стилі для форми додавання товару --- */
+
+/* Контейнер форми */
+.content-card {
+  background: white;
+  border-radius: 20px;
+  border: none;
+  transition: transform 0.2s ease;
+}
+
+/* Стилізація полів вводу */
+.admin-main .form-label {
+  color: #475569;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.admin-main .form-control, 
+.admin-main .form-select {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 15px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.admin-main .form-control:focus, 
+.admin-main .form-select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  background-color: #fff;
+}
+
+/* Зона завантаження зображення */
+.image-upload-area {
+  border: 2px dashed #cbd5e1 !important;
+  background: #f8fafc !important;
+  border-radius: 15px;
+  position: relative;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.image-upload-area:hover {
+  border-color: #6366f1 !important;
+  background: #f1f5f9 !important;
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+}
+
+.upload-placeholder span {
+  font-size: 3rem;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+/* Кастомна кнопка "Опублікувати" */
+.admin-main .btn-primary {
+  background: #6366f1;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.admin-main .btn-primary:hover {
+  background: #4f46e5;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+}
+
+.admin-main .btn-primary:disabled {
+  background: #94a3b8;
+  transform: none;
+}
+
+/* Анімація появи (для плавного переходу) */
+.admin-main {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Адаптивність для мобільних (якщо захочеш зайти з телефону) */
+@media (max-width: 992px) {
+  .admin-sidebar {
+    width: 80px;
+    padding: 10px;
+  }
+  .brand-name, .nav-item span:not(.material-symbols-outlined) {
+    display: none;
+  }
+  .admin-main {
+    margin-left: 80px;
+  }
+  .search-bar {
+    width: 150px;
+  }
+}
+
+
+/* order */
+/* Контейнер таблиці */
+.orders-table-container {
+  background: white;
+  border-radius: 12px;
+  padding: 5px;
+  border: 1px solid #eef0f2;
+}
+
+.custom-admin-table {
+  border-collapse: separate;
+  border-spacing: 0 4px; /* Менший відступ між рядками */
+}
+
+.custom-admin-table thead th {
+  background: #f8fafc !important; /* Легкий фон для заголовків */
+  color: #64748b !important;
+  font-size: 11px !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none !important;
+  padding: 12px 20px !important;
+}
+
+/* Рядки таблиці */
+.order-row {
+  transition: background 0.2s ease;
+}
+
+.order-row td {
+  background: white !important;
+  border-top: 1px solid #f1f5f9 !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+  padding: 14px 20px !important;
+  color: #334155;
+}
+
+.order-row td:first-child {
+  border-left: 1px solid #f1f5f9 !important;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.order-row td:last-child {
+  border-right: 1px solid #f1f5f9 !important;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.order-row:hover td {
+  background: #fcfdfe !important; /* Майже непомітна зміна кольору */
+}
+
+/* Елементи рядка */
+.order-id-text { 
+  font-weight: 600; 
+  color: #0f172a; /* Темний замість яскраво-фіолетового */
+  font-size: 0.9rem; 
+}
+.order-date-text { font-size: 0.8rem; color: #94a3b8; }
+
+.client-info { display: flex; align-items: center; gap: 10px; }
+.client-avatar {
+  width: 32px; height: 32px; 
+  background: #f1f5f9; /* Нейтральний фон */
+  color: #475569; 
+  border-radius: 6px; 
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 600; font-size: 0.75rem;
+  border: 1px solid #e2e8f0;
+}
+.client-name { font-weight: 500; color: #1e293b; font-size: 0.85rem; }
+.client-phone { font-size: 0.75rem; color: #64748b; }
+
+.items-badge {
+  color: #64748b;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.order-amount { font-weight: 600; color: #0f172a; }
+
+/* Статуси: Мінімалізм (Текст + Кольорова крапка) */
+.status-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 4px 0; /* Прибрали кольоровий фон */
+  font-size: 0.8rem; font-weight: 500;
+  color: #475569;
+}
+.status-pill .dot { width: 7px; height: 7px; border-radius: 50%; }
+
+/* Нейтральні кольори для точок */
+.status-pill.new .dot { background: #3b82f6; } /* Спокійний синій */
+.status-pill.processing .dot { background: #f59e0b; } /* Стриманий помаранчевий */
+.status-pill.shipped .dot { background: #8b5cf6; } /* М'який фіолетовий */
+.status-pill.completed .dot { background: #10b981; } /* Глибокий зелений */
+
+.btn-print-custom {
+  background: #1e293b; /* Глибокий темно-сірий замість фіолетового */
+  border: none; border-radius: 6px;
+  font-size: 0.85rem;
+  padding: 8px 16px;
+  transition: background 0.2s;
+}
+.btn-print-custom:hover {
+  background: #0f172a;
+}
+
+.action-btn-toggle { color: #cbd5e1; transition: color 0.2s; }
+.action-btn-toggle:hover { color: #64748b; }
+
+.stat-pill {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Група кнопок у рядку */
+.action-button-group {
+  display: flex;
+  align-items: center;
+}
+
+/* Базовий стиль кнопки статусу */
+.btn-status {
+  border: none;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* Ефекти наведення та активного стану */
+.btn-status:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
+
+.btn-status.active {
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  cursor: default;
+  transform: none;
+}
+
+/* Кольорові схеми */
+.btn-status-new.active { background-color: #3b82f6; color: white; }
+.btn-status-new:hover:not(.active) { background-color: #dbeafe; color: #1e40af; }
+
+.btn-status-proc.active { background-color: #f59e0b; color: white; }
+.btn-status-proc:hover:not(.active) { background-color: #fef3c7; color: #92400e; }
+
+.btn-status-ship.active { background-color: #8b5cf6; color: white; }
+.btn-status-ship:hover:not(.active) { background-color: #ede9fe; color: #5b21b6; }
+
+.btn-status-done.active { background-color: #10b981; color: white; }
+.btn-status-done:hover:not(.active) { background-color: #d1fae5; color: #065f46; }
+
+/* Кнопка видалення */
+.btn-status-delete {
+  background-color: transparent;
+  color: #ef4444;
+  padding: 4px;
+}
+
+.btn-status-delete:hover {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.btn-status .material-symbols-outlined {
+  font-size: 18px;
+}
+
+/* Розділювач */
+.button-divider {
+  width: 1px;
+  height: 20px;
+  background-color: #e2e8f0;
+  margin: 0 4px;
+}
+
+
+.items-status {
+  width: 120px;
+}
+
+
+
+
+
+
+
+
+
+
+/* admin.css */
+
+:root {
+  --admin-bg: #f8f9fa;
+  --sidebar-width: 260px;
+  --primary-color: #4361ee;
+  --accent-color: #3f37c9;
+  --text-main: #2b2d42;
+  --text-muted: #8d99ae;
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--admin-bg);
+}
+
+/* Sidebar Styles */
+.admin-sidebar {
+  width: var(--sidebar-width);
+  background: #ffffff;
+  border-right: 1px solid rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  z-index: 1000;
+}
+
+.sidebar-brand {
+  padding: 2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+}
+
+.brand-name {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem;
+  gap: 8px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: var(--text-muted);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-item:hover {
+  background: rgba(67, 97, 238, 0.05);
+  color: var(--primary-color);
+}
+
+.nav-item.active {
+  background: var(--primary-color);
+  color: white;
+}
+
+.nav-divider {
+  height: 1px;
+  background: rgba(0,0,0,0.05);
+  margin: 1rem 0;
+}
+
+/* Main Content Area */
+.admin-main {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 20px;
+}
+
+/* Card Styling */
+.content-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+}
+
+/* Table Styling */
+.custom-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.custom-table thead th {
+  background: #fcfcfd;
+  border-bottom: 1px solid #f0f0f5;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  padding: 1.2rem 1.5rem;
+}
+
+.custom-table tbody tr {
+  transition: transform 0.2s ease;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #fafbff !important;
+}
+
+.custom-table td {
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid #f8f8fb;
+}
+
+/* Badge Statuses */
+.badge-status {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.badge-status.delivered { /* Admin */
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.badge-status.new { /* Customer */
+  background: rgba(67, 97, 238, 0.1);
+  color: var(--primary-color);
+}
+
+/* Avatars */
+.rounded-circle {
+  border: 2px solid white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Sidebar Exit Button */
+.nav-item.exit {
+  margin-top: auto;
+  color: #ef4444;
+}
+
+.nav-item.exit:hover {
+  background: rgba(239, 68, 68, 0.05);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+}

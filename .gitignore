@@ -1,0 +1,6 @@
+node_modules/
+FULLSTACK/frontend/node_modules/
+.env
+build/
+dist/
+.cache/
