@@ -64,11 +64,11 @@ function Map() {
       });
 
      }
-
+     
     if (!window.google) {
       const script = document.createElement("script");
       script.src =
-        "https://maps.googleapis.com/maps/api/js?key=AIzaSyC5KahDBVdU3tWXez_3DhjoIottTsEuLM0&libraries=maps,marker";
+        process.env.REACT_APP_GOOGLE_MY_MAPS_ACCESS_TOKEN;
       script.async = true;
       script.onload = initMap;
       document.body.appendChild(script);

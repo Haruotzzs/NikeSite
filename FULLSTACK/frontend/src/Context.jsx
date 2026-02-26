@@ -12,7 +12,7 @@ const [products, setProducts] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4200/products`)
+      .get(`${process.env.REACT_APP_BACKEND_URL}/products`)
       .then((res) => setProducts(res.data))
       .catch((err) => console.log("Error fetching products:", err));
   }, []);
