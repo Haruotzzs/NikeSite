@@ -1,89 +1,118 @@
 import "./map.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react"; 
 import Container from "react-bootstrap/Container";
+import mapboxgl from "mapbox-gl";
 
 function Map() {
   const mapRef = useRef(null);
+  const [selectedStore, setSelectedStore] = useState(null); 
 
   useEffect(() => {
-    let map;
+    mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-    async function initMap() {
-      const { Map } = await window.google.maps.importLibrary("maps");
+    const centerUkraine = [31.1656, 48.3794];
 
-      const centerUkraine = { lat: 48.3794, lng: 31.1656 };
+    const map = new mapboxgl.Map({
+      container: mapRef.current,
+      style: "/mymap-style.json",
+      center: centerUkraine,
+      zoom: 5,
+      projection: "globe",
+      pitch: 20,
+      minZoom: 3,
+    });
 
-      const mapStyles = [
-        { elementType: "geometry", stylers: [{ color: "#ffffff" }] },
-        { elementType: "labels.text.fill", stylers: [{ color: "#000000" }] },
-        { elementType: "labels.text.stroke", stylers: [{ color: "#ffffff" }] },
-        {
-          featureType: "road",
-          elementType: "geometry",
-          stylers: [{ color: "#FF8C00" }]
-        },
-        {
-          featureType: "road",
-          elementType: "labels.text.fill",
-          stylers: [{ color: "#000000" }]
-        },
-        {
-          featureType: "administrative",
-          elementType: "geometry.stroke",
-          stylers: [{ color: "#FF0000", weight: 2 }]
-        },
-        { featureType: "poi", stylers: [{ visibility: "off" }] },
-        { featureType: "water", elementType: "geometry", stylers: [{ color: "#e0e0e0" }] }
-      ];
+    map.addControl(new mapboxgl.NavigationControl(), "top-right");
 
-      map = new Map(mapRef.current, {
-        center: centerUkraine,
-        zoom: 1,
-        styles: mapStyles,
-        restriction: {
-          latLngBounds: {
-            north: 52.3794,
-            south: 45.0,
-            west: 23.0,
-            east: 40.0
+    map.on("load", () => {
+  map.setFog({
+    "color": "#000000",       
+    "high-color": "#000000",     
+    "space-color": "#000000",  
+    "star-intensity": 0.3       
+  });
+
+});
+
+    map.on("load", () => {
+      const stores = {
+        type: "FeatureCollection",
+        features: [
+          { type: "Feature", properties: { title: "Store Kyiv", description: "Main store in Kyiv", address: "вул. Хрещатик, 1", hours: "10:00 - 21:00" }, geometry: { type: "Point", coordinates: [30.5234, 50.4501] } },
+          { type: "Feature", properties: { title: "Store Lviv", description: "Store in Lviv", address: "пл. Ринок, 10", hours: "09:00 - 20:00" }, geometry: { type: "Point", coordinates: [24.0316, 49.8429] } },
+          { type: "Feature", properties: { title: "Store Odesa", description: "Store in Odesa", address: "вул. Дерибасівська, 5", hours: "10:00 - 22:00" }, geometry: { type: "Point", coordinates: [30.7233, 46.4825] } }
+        ]
+      };
+
+      map.addSource("stores", { type: "geojson", data: stores });
+
+      const imageUrl = "/nike-logo-to-store-map.png";
+      map.loadImage(imageUrl, (error, image) => {
+        if (error) return console.error("Could not load image:", error);
+        if (!map.hasImage("store-icon")) map.addImage("store-icon", image);
+
+        map.addLayer({
+          id: "stores-layer",
+          type: "symbol",
+          source: "stores",
+          layout: {
+            "icon-image": "store-icon",
+            "icon-allow-overlap": true,
+            "icon-size": ["interpolate", ["linear"], ["zoom"], 4, 0.05, 5, 0.08, 10, 0.15, 15, 0.07, 20, 0.2],
           },
-          strictBounds: true
-        },
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: false,
-        // zoomControl: true,
-        // zoomControlOptions: {
-        //   position: window.google.maps.ControlPosition.RIGHT_CENTER
-        // }
+        });
       });
 
-      new window.google.maps.KmlLayer({
-        url: "https://www.google.com/maps/d/u/0/kml?forcekml=1&mid=1h9KroD16Vd9S8lHx0UJR_quwttdQNQA",
-        map,
+      map.on("click", "stores-layer", (e) => {
+        const coords = e.features[0].geometry.coordinates.slice();
+        const props = e.features[0].properties;
+
+        map.flyTo({ 
+          center: [coords[0] + 0.01, coords[1]],
+          zoom: 15, 
+          speed: 1.2 
+        });
+
+        setSelectedStore(props); 
       });
 
-     }
-     
-    if (!window.google) {
-      const script = document.createElement("script");
-      script.src =
-        process.env.REACT_APP_GOOGLE_MY_MAPS_ACCESS_TOKEN;
-      script.async = true;
-      script.onload = initMap;
-      document.body.appendChild(script);
-    } else {
-      initMap();
-    }
+      map.on("mouseenter", "stores-layer", () => map.getCanvas().style.cursor = "pointer");
+      map.on("mouseleave", "stores-layer", () => map.getCanvas().style.cursor = "");
+
+      const attribs = document.getElementsByClassName("mapboxgl-ctrl-attrib");
+      for (let i = 0; i < attribs.length; i++) attribs[i].style.display = "none";
+    });
+
+    return () => map.remove();
   }, []);
 
   return (
     <Container>
+      <div style={{ padding: "5% 0 0 0", width: "100%", position: "relative" }}>
+        <div style={{ position: "relative", borderRadius: "8px", overflow: "hidden", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+          
+          {/* Бічна панель (Overlay) */}
+          <div className={`store-sidebar ${selectedStore ? "open" : ""}`}>
+            {selectedStore && (
+              <div className="sidebar-content">
+                <button className="close-sidebar" onClick={() => setSelectedStore(null)}>×</button>
+                <h3>{selectedStore.title}</h3>
+                <p className="description">{selectedStore.description}</p>
+                <div className="details">
+                  <p><strong>Адреса:</strong> {selectedStore.address}</p>
+                  <p><strong>Години:</strong> {selectedStore.hours}</p>
+                </div>
+                <button className="action-button">Детальніше</button>
+              </div>
+            )}
+          </div>
 
-    
-
-      <div style={{padding:"10%", width:"190vh"}}>
-      <div ref={mapRef} id="map" style={{display:"flex", justifyContent:"center", height: "80vh", }} />
+          <div
+            ref={mapRef}
+            id="map"
+            style={{ height: "90vh", width: "100%" }}
+          />
+        </div>
       </div>
     </Container>
   );

@@ -1,23 +1,125 @@
-.custom-zoom-controls {
+/* Основний контейнер бічної панелі */
+.store-sidebar {
+  position: absolute;
+  top: 0;
+  right: -460px; /* Збільшено ширину + запас для тіні */
+  left: auto;
+  
+  width: 450px; /* Ширина збільшена на 100px */
+  height: 100%; /* Тепер на всю висоту карти для більш чистого вигляду */
+  background: #ffffff;
+  z-index: 100;
+  
+  /* Плавніша заміна кутів */
+  border-radius: 20px 0 0 20px;
+  
+  /* Глибока м'яка тінь */
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08);
+  
+  /* Анімація */
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 40px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-right: 10px;
 }
 
-.custom-zoom-button {
-  background-color: #ffffff;
-  border: 1px solid #888;
-  border-radius: 4px;
-  width: 40px;
-  height: 40px;
-  font-size: 24px;
+/* Стан відкритої панелі */
+.store-sidebar.open {
+  transform: translateX(-460px); 
+}
+
+/* Контент всередині панелі */
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Кнопка закриття */
+.close-sidebar {
+  align-self: flex-end; /* Вирівнювання в кут */
+  background: #f5f5f5;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 22px;
+  line-height: 1;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  transition: background-color 0.2s;
-}
-
-.container{
+  color: #000;
+  display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.2s ease;
+  margin-bottom: 20px;
 }
+
+.close-sidebar:hover {
+  background: #e5e5e5;
+}
+
+/* Типографіка */
+.sidebar-content h3 {
+  font-size: 28px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #757575;
+  margin-bottom: 30px;
+}
+
+/* Деталі (Адреса, Години) */
+.details {
+  border-top: 1px solid #f0f0f0;
+  padding-top: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.details p {
+  margin: 0;
+  font-size: 15px;
+  color: #111;
+}
+
+.details strong {
+  display: block;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #bcbcbc;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+/* Кнопка дії (Nike Style) */
+.action-button {
+  margin-top: auto;
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 18px;
+  border-radius: 30px; /* Круглі краї */
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.2s ease;
+}
+
+.action-button:hover {
+  background: #333;
+}
+
+.action-button:active {
+  transform: scale(0.98);
+}
+

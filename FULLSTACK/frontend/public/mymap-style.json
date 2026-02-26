@@ -1,0 +1,84 @@
+{
+  "version": 8,
+  "name": "black-and-white-hillshade-3d",
+  "center": [31.1656, 48.3794],
+  "zoom": 5,
+  "bearing": 0,
+  "pitch": 45,
+  "sprite": "mapbox://sprites/mapbox/light-v11",
+  "glyphs": "mapbox://fonts/mapbox/{fontstack}/{range}.pbf",
+  "sources": {
+    "vector-tiles": {
+      "type": "vector",
+      "url": "mapbox://mapbox.mapbox-streets-v8"
+    },
+    "hillshade-dem": {
+      "type": "raster-dem",
+      "url": "mapbox://mapbox.terrain-rgb",
+      "tileSize": 512
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": { "background-color": "#ffffff" }
+    },
+    {
+      "id": "hillshade",
+      "type": "hillshade",
+      "source": "hillshade-dem",
+      "paint": {
+        "hillshade-illumination-direction": 335,
+        "hillshade-illumination-anchor": "map",
+        "hillshade-exaggeration": 0.5
+      }
+    },
+    {
+      "id": "water",
+      "type": "fill",
+      "source": "vector-tiles",
+      "source-layer": "water",
+      "paint": { "fill-color": "#e0e0e0" }
+    },
+    
+    {
+      "id": "roads",
+      "type": "line",
+      "source": "vector-tiles",
+      "source-layer": "road",
+      "paint": { "line-color": "#aaaaaa", "line-width": 1.2 }
+    },
+    {
+        "id": "admin-boundaries",
+        "type": "line",
+        "source": "vector-tiles",
+        "source-layer": "admin",
+        "paint": { "line-color": "#222222", "line-width": 0.5 }
+    },
+
+    {
+      "id": "buildings-3d",
+      "type": "fill-extrusion",
+      "source": "vector-tiles",
+      "source-layer": "building",
+      "minzoom": 15,
+      "paint": {
+        "fill-extrusion-color": "#cccccc",
+        "fill-extrusion-height": ["get", "height"],
+        "fill-extrusion-base": ["get", "min_height"],
+        "fill-extrusion-opacity": 0.8
+      }
+    },
+
+    {
+      "id": "pois",
+      "type": "symbol",
+      "source": "vector-tiles",
+      "source-layer": "poi_label",
+     
+      "layout": { "text-field": "{name_en}", "text-size": 12 },
+      "paint": { "text-color": "#000000" }
+    }
+  ]
+}

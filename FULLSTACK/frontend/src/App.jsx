@@ -158,7 +158,7 @@ function App() {
             <>
               <Header />
               <Map />
-              <Footer />
+              
             </>
           }
         />
