@@ -11,8 +11,8 @@ function Footer() {
     <div className="footer">
       
         <div>
-          <div className="container1"> <Link to="/store" className="nav-link Link">Privacy & Terms</Link></div>
-          <div className="container1"><Link to="/store" className="nav-link Link">Find a Store</Link></div>
+          <div className="container1"> <Link to="/*" className="nav-link Link">Privacy & Terms</Link></div>
+          <div className="container1"><Link to="/find-a-store" className="nav-link Link">Find a Store</Link></div>
           <div className="container1"><Link to="/help" className="nav-link Link">Help</Link></div>
           <div className="container1"><Link to="https://www.instagram.com/nike/" className="nav-link Link">Join Us</Link></div>
           <div className="container1"><Link to="/Login" className="nav-link Link">Sign In</Link></div>

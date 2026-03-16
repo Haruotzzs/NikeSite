@@ -50,7 +50,6 @@ function App() {
             <>
               <Header />
               <Help />
-              <Footer />
             </>
           }
         />
@@ -158,7 +157,6 @@ function App() {
             <>
               <Header />
               <Map />
-              
             </>
           }
         />

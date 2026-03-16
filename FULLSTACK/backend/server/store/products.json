@@ -170,6 +170,13 @@
         "comment": "фівфівфв",
         "rating": 4,
         "date": "2026-01-28T19:43:29.085Z"
+      },
+      {
+        "userId": "qS5t8n8tGvRojPZJApM6lrBbuI73",
+        "user": "user",
+        "comment": "шляпа мені не подобажться ця хуйня в вигляді цієї футблки ",
+        "rating": 0,
+        "date": "2026-03-09T09:40:37.956Z"
       }
     ]
   },
@@ -210,6 +217,13 @@
         "comment": "asdasdassdasdasdsadasd",
         "rating": 1,
         "date": "2026-01-28T18:52:24.591Z"
+      },
+      {
+        "userId": "qS5t8n8tGvRojPZJApM6lrBbuI73",
+        "user": "user",
+        "comment": "asd",
+        "rating": 2,
+        "date": "2026-03-13T07:14:47.044Z"
       }
     ]
   },

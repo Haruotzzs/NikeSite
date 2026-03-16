@@ -32,9 +32,7 @@ const Product = () => {
 
 
 
-// Функція для розрахунку середнього рейтингу
 const calculateAverageRating = () => {
-  // Додаємо перевірку на існування product
   if (!product || !product.reviews || product.reviews.length === 0) {
     return 0;
   }
@@ -50,8 +48,8 @@ const averageRating = calculateAverageRating();
 const handleAddComment = async () => {
   if (!currentUser) return alert("Будь ласка, увійдіть в акаунт.");
   if (!newComment.trim()) return alert("Напишіть текст відгуку.");
+  if (!newRating) return alert("Оцініть товар.");
 
-  // 1. ПЕРЕВІРКА: Шукаємо відгук поточного користувача в локальних даних продукту
   const hasAlreadyReviewed = product.reviews?.some(
     (review) => review.userId === currentUser.uid
   );
@@ -62,7 +60,7 @@ const handleAddComment = async () => {
   }
 
   const reviewData = {
-    userId: currentUser.uid, // Передаємо UID з Firebase Auth
+    userId: currentUser.uid, 
     user: currentUser.displayName || "Anonymous",
     comment: newComment,
     rating: newRating
@@ -78,8 +76,7 @@ const handleAddComment = async () => {
     if (response.ok) {
       alert("Відгук опубліковано!");
       setNewComment("");
-      setShowComments(false); // Закриваємо модалку
-      // Тут бажано оновити дані через контекст (refresh)
+      setShowComments(false); 
     } else {
       const errorData = await response.json();
       alert(errorData.error || "Виникла помилка");
@@ -202,7 +199,7 @@ const handleAddComment = async () => {
 
             <hr style={{ border: 'none', borderTop: '1px solid #eee', marginBottom: '20px' }} />
 
-            {/* --- ФОРМА ВВОДУ НОВОГО КОМЕНТАРЯ --- */}
+            {/* --- FORM TO ADD COMMENT --- */}
             <div className="add-comment-form" style={{ marginBottom: '25px' }}>
               <div style={{ display: 'flex', gap: '5px', marginBottom: '10px' }}>
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -260,9 +257,7 @@ const handleAddComment = async () => {
       </div>
 
       <div style={{ paddingTop: "15vh", justifyContent: "center", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {/* ... Решта вашого коду без змін ... */}
         <div className="product-container">
-           {/* Блоки з картинками та описом залишаються як були */}
            <div className="size-img">
             {images.map((imgUrl, index) => (
               <img 
@@ -368,7 +363,6 @@ const handleAddComment = async () => {
           className="material-symbols-outlined" 
           style={{ 
             fontSize: "30px", 
-            // Зірка зафарбована, якщо її номер менший або дорівнює середньому рейтингу
             color: star <= Math.round(averageRating) ? 'black' : '#ddd', 
             fontVariationSettings: star <= Math.round(averageRating) ? "'FILL' 1" : "'FILL' 0" 
           }} 

@@ -7,11 +7,9 @@ import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ProductContext } from "../../../Context.jsx";
 
-// Імпорт компонентів
 import Orders from "./bar/Orders.jsx";
 import Comments from "./bar/Comments.jsx";
 
-// Імпорт Bootstrap та медіа
 import Container from "react-bootstrap/Container";
 import NoneAvatarImg from "./none_avatar.jpg";
 
@@ -19,12 +17,10 @@ function UserProfile() {
   const navigate = useNavigate();
   const products = useContext(ProductContext);
 
-  // Основні стейти користувача
-  const [username, setUsername] = useState("Loading...");
+  const [username, setUsername] = useState("User");
   const [currentUser, setCurrentUser] = useState(null);
   const [activeSection, setActiveSection] = useState("orders");
   
-  // Стейти для адреси
   const [address, setAddress] = useState("Add delivery address");
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [addressDetails, setAddressDetails] = useState({
@@ -35,8 +31,7 @@ function UserProfile() {
     house: "",
     apartment: ""
   });
-
-  // Стейти для контактної інформації (виправлено назви під БД)
+  
   const [showContactModal, setShowContactModal] = useState(false);
   const [contactDetails, setContactDetails] = useState({
     firstName: "",
@@ -45,7 +40,7 @@ function UserProfile() {
     email: ""
   });
 
-  // Спостереження за авторизацією та завантаження даних
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -56,7 +51,6 @@ function UserProfile() {
           if (userDoc.exists()) {
             const data = userDoc.data();
 
-            // 1. ПІДТЯГУЄМО АДРЕСУ
             if (data.addressDetails) {
               setAddressDetails(data.addressDetails);
               const d = data.addressDetails;
@@ -65,7 +59,6 @@ function UserProfile() {
               }
             }
 
-            // 2. ПІДТЯГУЄМО КОНТАКТИ (firstName, lastName, phone з вашої БД)
             if (data.contactDetails) {
               const c = data.contactDetails;
               setContactDetails({
@@ -75,7 +68,6 @@ function UserProfile() {
                 email: c.email || user.email || ""
               });
               
-              // Формуємо ім'я для привітання
               const dbName = `${c.firstName || ""} ${c.lastName || ""}`.trim();
               setUsername(dbName || user.displayName || user.email?.split('@')[0] || "User");
             } else {
@@ -92,13 +84,23 @@ function UserProfile() {
     return () => unsubscribe();
   }, [navigate]);
 
-  // Логіка зміни полів
+
+    useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (username) => {
+      if (username === "user") {
+        
+
+        ;}});
+    return () => unsubscribe();
+  }, ); 
+
+
+
   const handleInputChange = (e, setter) => {
     const { name, value } = e.target;
     setter(prev => ({ ...prev, [name]: value }));
   };
 
-  // Збереження адреси
   const handleSaveAddress = async () => {
     if (!currentUser) return;
     try {
@@ -112,7 +114,6 @@ function UserProfile() {
     }
   };
 
-  // Збереження контактів (виправлено ключі)
   const handleSaveContact = async () => {
     if (!currentUser) return;
     try {
@@ -134,7 +135,6 @@ function UserProfile() {
     }
   };
 
-  // Розрахунок статистики відгуків
   const userStats = useMemo(() => {
     if (!products || !currentUser) return { count: 0, avg: 0, reviews: [] };
     const myReviews = [];
@@ -160,7 +160,6 @@ function UserProfile() {
     <Container>
       <div className="profile-wrapper">
         
-        {/* Модалка адреси */}
         {showAddressModal && (
           <div className="address-modal-overlay" onClick={() => setShowAddressModal(false)}>
             <div className="address-modal-content wide" onClick={(e) => e.stopPropagation()}>
@@ -202,7 +201,6 @@ function UserProfile() {
           </div>
         )}
 
-        {/* Модалка контактів (Виправлено input name) */}
         {showContactModal && (
           <div className="address-modal-overlay" onClick={() => setShowContactModal(false)}>
             <div className="address-modal-content wide" onClick={(e) => e.stopPropagation()}>
@@ -238,7 +236,7 @@ function UserProfile() {
               <img src={currentUser?.photoURL || NoneAvatarImg} alt="Profile" className="modern-avatar" />
             </div>
             <div className="user-text-details">
-              <h1 className="user-greeting">Hello, {username}</h1>
+              <h1 className="user-greeting">{username}</h1>
               <div className="user-meta">
                 <span className="meta-item address-trigger" onClick={() => setShowContactModal(true)}>
                   <span className="material-symbols-outlined">phone</span> 

@@ -56,7 +56,28 @@
         "source-layer": "admin",
         "paint": { "line-color": "#222222", "line-width": 0.5 }
     },
-
+{
+  "id": "ukraine-border-outline",
+  "type": "line",
+  "source": "vector-tiles",
+  "source-layer": "admin",
+  "filter": ["==", "admin_level", 0],
+  "paint": {
+    "line-color": "#ffffff",
+    "line-width": 10
+  }
+},
+{
+  "id": "ukraine-border",
+  "type": "line",
+  "source": "vector-tiles",
+  "source-layer": "admin",
+  "filter": ["==", "admin_level", 0],
+  "paint": {
+    "line-color": "#bd0000",
+    "line-width": 1
+  }
+},
     {
       "id": "buildings-3d",
       "type": "fill-extrusion",
