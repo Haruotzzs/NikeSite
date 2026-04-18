@@ -10,7 +10,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";
 
 function LkeCard() {
-  const productsFromContext = useContext(ProductContext);
+  const contextData = useContext(ProductContext);
+  const productsFromContext = contextData?.products || [];
   const [likedIds, setLikedIds] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -40,9 +41,10 @@ function LkeCard() {
     return () => unsubscribeAuth();
   }, []);
 
-  const likedProducts = productsFromContext.filter((product) =>
-    likedIds.includes(product.id.toString()) || likedIds.includes(product.id)
-  );
+  const likedProducts = productsFromContext.filter((product) => {
+    const productId = product._id || product.id;
+    return likedIds.includes(productId?.toString()) || likedIds.includes(productId);
+  });
 
   if (loading) return <p style={{ textAlign: "center" }}>Loading Favorites...</p>;
 
@@ -50,17 +52,19 @@ function LkeCard() {
     <>
       {likedProducts.length > 0 ? (
         likedProducts.map((product) => {
-          
-          const displayImg = typeof product.productImg === 'object' && !Array.isArray(product.productImg)
-            ? Object.values(product.productImg)[0] 
-            : Array.isArray(product.productImg) 
-              ? product.productImg[0] 
-              : product.productImg;   
+          const displayImg = 
+            product.images && product.images.length > 0
+              ? product.images[0].url
+              : typeof product.productImg === 'object' && !Array.isArray(product.productImg)
+                ? Object.values(product.productImg)[0] 
+                : Array.isArray(product.productImg) 
+                  ? product.productImg[0] 
+                  : product.productImg;
 
           return (
-            <Container key={product.id}>
+            <Container key={product._id || product.id}>
               <div className="card">
-                <Link to={`/product/${product.id}`} className="card-link">
+                <Link to={`/product/${product._id || product.id}`} className="card-link">
                   <div className="card-img-wrapper">
                     <img 
                       src={displayImg || "/fallback-image.jpg"} 
@@ -70,7 +74,7 @@ function LkeCard() {
                   </div>
                   <h2 id="title" className="card-title">{product.tovarName}</h2>
                   <p id="type">{product.tovarClass}</p>
-                  <p id="card-price" className="card-price">{product.tovarPrice}$</p>
+                  <p id="card-price" className="card-price">₴{product.price || product.tovarPrice}</p>
                 </Link>
               </div>
             </Container>

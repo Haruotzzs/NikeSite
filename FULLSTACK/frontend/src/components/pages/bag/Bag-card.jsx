@@ -1,16 +1,21 @@
 import "./bag-card.css";
 import "../../styles.css";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import { auth, db } from "../../../server/firebase.js";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { ProductContext } from "../../../Context.jsx";
 
 function Bagcard() {
   const navigate = useNavigate();
+  const contextData = useContext(ProductContext);
+  const allProducts = contextData?.products || [];
+
   const [bagElements, setBagElements] = useState([]);
+  const [enrichedBagElements, setEnrichedBagElements] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,8 +26,6 @@ function Bagcard() {
         const unsubscribeFirestore = onSnapshot(userDocRef, (docSnap) => {
           if (docSnap.exists()) {
             const userData = docSnap.data();
-            // Отримуємо масив і на всякий випадок групуємо його, 
-            // щоб не було однакових карток (id + розмір)
             setBagElements(userData.bagElements || []);
           } else {
             setBagElements([]);
@@ -42,6 +45,22 @@ function Bagcard() {
 
     return () => unsubscribeAuth();
   }, [navigate]);
+
+  // Додаємо деталі про товари з контексту
+  useEffect(() => {
+    const enriched = bagElements.map((bagItem) => {
+      const fullProduct = allProducts.find(
+        (p) => p._id === bagItem.id || p.id === bagItem.id
+      );
+      
+      return {
+        ...bagItem,
+        ...fullProduct, // Додаємо всі деталі товару з контексту
+      };
+    });
+
+    setEnrichedBagElements(enriched);
+  }, [bagElements, allProducts]);
 
   // ФУНКЦІЯ ОНОВЛЕННЯ ТА ВИДАЛЕННЯ
   const updateQuantity = async (index, change) => {
@@ -74,8 +93,10 @@ function Bagcard() {
 
   // Розрахунок загальної суми кошика (Total)
   const calculateTotal = () => {
-    return bagElements.reduce((total, item) => {
-      return total + (Number(item.tovarPrice) * (item.bagProductCount || 1));
+    return enrichedBagElements.reduce((total, item) => {
+      const price = Number(item.tovarPrice || item.price || item.tovarPrice || 0);
+      const quantity = item.bagProductCount || 1;
+      return total + (price * quantity);
     }, 0).toFixed(2);
   };
 
@@ -91,7 +112,7 @@ function Bagcard() {
 
   return (
     <Container>
-      {bagElements.length === 0 ? (
+      {enrichedBagElements.length === 0 ? (
         <div className="bag-page">
           <h2 className="bag-title">Your Bag is Empty</h2>
           <p className="bag-text">Once you add something to your bag — it will appear here.</p>
@@ -103,45 +124,54 @@ function Bagcard() {
           {/* ЛІВА ЧАСТИНА: СПИСОК ТОВАРІВ */}
           <div className="card-container1" style={{ flex: 2 }}>
             
-            {bagElements.map((product, index) => (
-              <div className="bag-item-row" key={`${product.id}-${product.selectedSize}-${index}`} style={{ borderBottom: "1px solid #e5e5e5", marginBottom: "20px" }}>
-                <div className="card1" style={{ display: "flex", gap: "20px", padding: "10px 0" }}>
-                  
-                  <div className="card-img-wrapper1">
-                    <Link to={`/product/${product.id}`}>
-                      <img
-                        src={product.productImg || "/fallback-image.jpg"}
-                        alt={product.tovarName}
-                        className="card-img1"
-                        style={{ width: "150px", height: "auto" }}
-                      />
-                    </Link>
-                  </div>
+            {enrichedBagElements.map((product, index) => {
+              const displayImg =
+                product.images && product.images.length > 0
+                  ? product.images[0].url
+                  : product.productImg instanceof Object 
+                    ? Object.values(product.productImg)[0]
+                    : product.productImg;
 
-                  <div className="info" style={{ flex: 1 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                      <Link to={`/product/${product.id}`} className="card-link">
-                        <h2 className="card-title1">{product.tovarName}</h2>
+              return (
+                <div className="bag-item-row" key={`${product.id}-${product.selectedSize}-${index}`} style={{ borderBottom: "1px solid #e5e5e5", marginBottom: "20px" }}>
+                  <div className="card1" style={{ display: "flex", gap: "20px", padding: "10px 0" }}>
+                    
+                    <div className="card-img-wrapper1">
+                      <Link to={`/product/${product._id || product.id}`}>
+                        <img
+                          src={displayImg || "/fallback-image.jpg"}
+                          alt={product.tovarName}
+                          className="card-img1"
+                          style={{ width: "150px", height: "auto" }}
+                        />
                       </Link>
-                      <p className="card-price">
-                        {(Number(product.tovarPrice) * (product.bagProductCount || 1)).toFixed(2)}$
-                      </p>
                     </div>
-                    
-                    <p id="type" style={{ color: "#757575" }}>{product.type}</p>
-                    <p id="size">Size: <strong>{product.selectedSize}</strong></p>
-                    
-                    <div style={{ display: "flex", alignItems: "center", gap: "15px", marginTop: "10px" }}>
-                      <span>Quantity: {product.bagProductCount || 1}</span>
-                      <div className="quantity-controls">
-                        <button className="value-btn" onClick={() => updateQuantity(index, 1)}>+</button>
-                        <button className="value-btn" onClick={() => updateQuantity(index, -1)}>−</button>
+
+                    <div className="info" style={{ flex: 1 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <Link to={`/product/${product._id || product.id}`} className="card-link">
+                          <h2 className="card-title1">{product.tovarName}</h2>
+                        </Link>
+                        <p className="card-price">
+                          {(Number(product.tovarPrice || product.price || 0) * (product.bagProductCount || 1)).toFixed(2)}₴
+                        </p>
+                      </div>
+                      
+                      <p id="type" style={{ color: "#757575" }}>{product.tovarClass}</p>
+                      <p id="size">Size: <strong>{product.selectedSize}</strong></p>
+                      
+                      <div style={{ display: "flex", alignItems: "center", gap: "15px", marginTop: "10px" }}>
+                        <span>Quantity: {product.bagProductCount || 1}</span>
+                        <div className="quantity-controls">
+                          <button className="value-btn" onClick={() => updateQuantity(index, 1)}>+</button>
+                          <button className="value-btn" onClick={() => updateQuantity(index, -1)}>−</button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* ПРАВА ЧАСТИНА: ПІДСУМОК (SUMMARY) */}
@@ -151,7 +181,7 @@ function Bagcard() {
   
   <div className="summary-row">
     <span>Subtotal</span>
-    <span>{calculateTotal()}$</span>
+    <span>{calculateTotal()}₴</span>
   </div>
   
   <div className="summary-row">
@@ -163,7 +193,7 @@ function Bagcard() {
   
   <div className="summary-row total-row">
     <span>Total</span>
-    <span className="total-amount">{calculateTotal()}$</span>
+    <span className="total-amount">{calculateTotal()}₴</span>
   </div>
 
   <button className="checkout-action-btn" onClick={() => navigate("/checkout")}>

@@ -15,7 +15,9 @@ import NoneAvatarImg from "./none_avatar.jpg";
 
 function UserProfile() {
   const navigate = useNavigate();
-  const products = useContext(ProductContext);
+  const contextData = useContext(ProductContext);
+
+  const products = useMemo(() => contextData?.products || [], [contextData]);
 
   const [username, setUsername] = useState("User");
   const [currentUser, setCurrentUser] = useState(null);
@@ -83,18 +85,6 @@ function UserProfile() {
     });
     return () => unsubscribe();
   }, [navigate]);
-
-
-    useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (username) => {
-      if (username === "user") {
-        
-
-        ;}});
-    return () => unsubscribe();
-  }, ); 
-
-
 
   const handleInputChange = (e, setter) => {
     const { name, value } = e.target;

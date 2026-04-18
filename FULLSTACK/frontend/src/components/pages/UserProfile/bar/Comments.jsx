@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { ProductContext } from "../../../../Context.jsx"; 
 
 function Comments({ reviews }) {
-  const products = useContext(ProductContext);
+  const contextData = useContext(ProductContext);
+  const products = contextData?.products || [];
 
   if (!reviews || reviews.length === 0) {
     return (
@@ -17,18 +18,20 @@ function Comments({ reviews }) {
   return (
     <div className="profile-reviews-list">
       {reviews.map((review, index) => {
-        let rawImg = products.find(p => p.id === review.productId)?.productImg;
+        const product = products.find(p => p._id === review.productId || p.id === review.productId);
+        let rawImg = product?.images && product.images.length > 0
+          ? product.images[0].url
+          : product?.productImg;
+          
         if (rawImg && typeof rawImg === 'object') {
           rawImg = Object.values(rawImg)[0];
         }
-
-
 
         return (
           <div key={index} className="review-history-item">
             <div className="review-product-preview">
               <img 
-                src = {rawImg}
+                src={rawImg || "/fallback-image.jpg"}
                 alt={review.productName} 
                 onError={(e) => { e.target.src = "/none_img.jpg"; }} 
               />

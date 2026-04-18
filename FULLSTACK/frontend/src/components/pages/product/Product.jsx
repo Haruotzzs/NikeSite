@@ -9,13 +9,14 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../../server/firebase.js";
-import { ProductContext } from "../../../Context.jsx";
+import { ProductContext, backendUrl } from "../../../Context.jsx";
 
 import Card from "../../card/Card.jsx"
 
 const Product = () => {
   const { id } = useParams();
-  const products = useContext(ProductContext);
+  const contextData = useContext(ProductContext);
+  const products = contextData?.products || [];
   const scrollRef = useRef(null);
 
   const [showComments, setShowComments] = useState(false);
@@ -27,18 +28,19 @@ const Product = () => {
 
   const [newComment, setNewComment] = useState("");
   const [newRating, setNewRating] = useState(0);
+  const [productReviews, setProductReviews] = useState([]);
 
-  const product = products.find((item) => item.id === parseInt(id));
+  const product = products.find((item) => item._id === id || item.id === parseInt(id));
 
 
 
 const calculateAverageRating = () => {
-  if (!product || !product.reviews || product.reviews.length === 0) {
+  if (!productReviews || productReviews.length === 0) {
     return 0;
   }
   
-  const total = product.reviews.reduce((sum, review) => sum + Number(review.rating), 0);
-  const average = total / product.reviews.length;
+  const total = productReviews.reduce((sum, review) => sum + Number(review.rating), 0);
+  const average = total / productReviews.length;
   
   return average.toFixed(1);
 };
@@ -46,61 +48,93 @@ const calculateAverageRating = () => {
 const averageRating = calculateAverageRating();
 
 const handleAddComment = async () => {
-  if (!currentUser) return alert("Будь ласка, увійдіть в акаунт.");
-  if (!newComment.trim()) return alert("Напишіть текст відгуку.");
-  if (!newRating) return alert("Оцініть товар.");
+  if (!currentUser) return alert("Please log in to your account.");
+  if (!newComment.trim()) return alert("Please write a review.");
+  if (!newRating) return alert("Please rate the product.");
 
-  const hasAlreadyReviewed = product.reviews?.some(
+  const hasAlreadyReviewed = productReviews?.some(
     (review) => review.userId === currentUser.uid
   );
 
   if (hasAlreadyReviewed) {
-    alert("Ви вже залишили відгук для цього товару. Дякуємо за вашу думку!");
+    alert("You have already reviewed this product. Thank you for your feedback!");
     return;
   }
 
   const reviewData = {
-    userId: currentUser.uid, 
+    userId: currentUser.uid,
     user: currentUser.displayName || "Anonymous",
     comment: newComment,
     rating: newRating
   };
 
   try {
-    const response = await fetch(`http://localhost:4200/products/${product.id}`, {
+    const response = await fetch(`${backendUrl}/products/${product._id || product.id}/review`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(reviewData),
     });
 
     if (response.ok) {
-      alert("Відгук опубліковано!");
+      const newReviewWithDate = { ...reviewData, date: new Date() };
+      setProductReviews([...productReviews, newReviewWithDate]);
+
+      alert("Review published!");
       setNewComment("");
-      setShowComments(false); 
+      setNewRating(0);
+      setShowComments(false);
     } else {
       const errorData = await response.json();
-      alert(errorData.error || "Виникла помилка");
+      alert(errorData.error || "An error occurred");
     }
   } catch (error) {
-    console.error("Помилка:", error);
+    alert("Error sending comment");
   }
 };
 
   const recommendations = products.filter(
-    (item) => item.tovarClass === product?.tovarClass && item.id !== product?.id
+    (item) => item.tovarClass === product?.tovarClass && (item._id !== product?._id && item.id !== product?.id)
   );
 
   const allVariants = products.filter(
     (item) => item.tovarClass === product?.tovarClass
   );
 
-  const images = product?.productImg 
-    ? (typeof product.productImg === 'object' ? Object.values(product.productImg) : [product.productImg])
-    : [];
+  const sizeOptions = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
+  const getVariantImage = (variant) => {
+    if (variant.images && variant.images.length > 0) {
+      return variant.images[0].url || variant.images[0];
+    }
+    if (variant.mainImage) return variant.mainImage;
+    if (variant.thumb) return variant.thumb;
+    if (variant.productImg) return typeof variant.productImg === 'object' ? Object.values(variant.productImg)[0] : variant.productImg;
+    return '';
+  };
+
+  const images = product?.images && product.images.length > 0
+    ? product.images.map(img => img.url)
+    : product?.productImg 
+      ? (typeof product.productImg === 'object' ? Object.values(product.productImg) : [product.productImg])
+      : [];
 
   useEffect(() => {
     if (images.length > 0) setActiveImg(images[0]);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`${backendUrl}/products/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setProductReviews(data.reviews || []);
+        }
+      } catch (error) {
+        setProductReviews(product?.reviews || []);
+      }
+    };
+
+    fetchProduct();
 
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -109,9 +143,9 @@ const handleAddComment = async () => {
         const unsubscribeFirestore = onSnapshot(userDocRef, (docSnap) => {
           if (docSnap.exists()) {
             const userData = docSnap.data();
-            setIsLiked(userData.likedItems?.includes(id) || false);
+            setIsLiked(userData.likedItems?.includes(id) || userData.likedItems?.includes(product?._id) || false);
             const alreadyInBag = userData.bagElements?.some(
-              item => item.id === product?.id && item.selectedSize === selectedSize
+              item => (item.id === product?._id || item.id === product?.id) && item.selectedSize === selectedSize
             );
             setIsInBag(alreadyInBag);
           }
@@ -124,22 +158,30 @@ const handleAddComment = async () => {
       }
     });
     return () => unsubscribeAuth();
-  }, [id, product?.id, selectedSize, images.length]); 
+  }, [id, product?.id, product?._id, selectedSize, images.length]); 
 
   const handleAddToBag = async () => {
-    if (!currentUser) return alert("Будь ласка, увійдіть в акаунт.");
-    if (product.size && !selectedSize) return alert("Будь ласка, виберіть розмір.");
+    if (!currentUser) return alert("Please log in to your account.");
+    if (product.sizes && product.sizes.length > 0 && !selectedSize) return alert("Please select a size.");
     
-    const displayImg = typeof product.productImg === 'object' ? Object.values(product.productImg)[0] : product.productImg;
+    const displayImg = 
+      product.images && product.images.length > 0
+        ? product.images[0].url
+        : typeof product.productImg === 'object' 
+          ? Object.values(product.productImg)[0] 
+          : product.productImg;
+    
     const userDocRef = doc(db, "users", currentUser.uid);
     const itemData = {
-      id: product.id,
+      id: product._id || product.id,
       tovarName: product.tovarName,
-      tovarPrice: product.tovarPrice,
+      tovarPrice: product.tovarPrice || product.price,
       productImg: displayImg,
       type: product.tovarClass,
       selectedSize: selectedSize, 
-      colors: product.colors || 1
+      colors: product.colors || 1,
+      color: product.color || "",
+      bagProductCount: 1
     };
 
     try {
@@ -148,33 +190,30 @@ const handleAddComment = async () => {
       } else {
         await setDoc(userDocRef, { bagElements: arrayUnion(itemData) }, { merge: true });
       }
-    } catch (error) { console.error("Помилка кошика:", error); }
+    } catch (error) {
+      alert("Error adding to cart");
+    }
   };
 
   const handleLikeToggle = async () => {
-    if (!currentUser) return alert("Будь ласка, увійдіть в акаунт.");
+    if (!currentUser) return alert("Please log in to your account.");
     const userDocRef = doc(db, "users", currentUser.uid);
     try {
       await setDoc(userDocRef, {
         likedItems: isLiked ? arrayRemove(id) : arrayUnion(id)
       }, { merge: true });
-    } catch (error) { console.error("Помилка лайка:", error); }
+    } catch (error) { }
   };
 
   if (!product) return <h2>Product not found</h2>;
 
-  const getBtnStyle = (sizeName) => {
-    const isAvailable = product.size ? product.size[sizeName] : true;
-    return {
-      backgroundColor: isAvailable ? (selectedSize === sizeName ? "black" : "white") : "#f5f5f5",
-      color: isAvailable ? (selectedSize === sizeName ? "white" : "black") : "#cccccc",
-      cursor: isAvailable ? "pointer" : "not-allowed",
-      opacity: isAvailable ? 1 : 0.6,
-      border: "1px solid #ddd",
-      marginRight: "5px",
-      padding: "8px 12px",
-      minWidth: "45px"
-    };
+  const getSizeBtnClass = (sizeName) => {
+    const isAvailable = product.sizes ? product.sizes.includes(sizeName) : false;
+    return [
+      'size-btn',
+      selectedSize === sizeName ? 'selected' : '',
+      !isAvailable ? 'unavailable' : ''
+    ].filter(Boolean).join(' ');
   };
 
   return (
@@ -226,11 +265,11 @@ const handleAddComment = async () => {
               </div>
             </div>
 
-            <h5 style={{ marginBottom: '15px' }}>Customer Reviews ({product.reviews?.length || 0})</h5>
+            <h5 style={{ marginBottom: '15px' }}>Customer Reviews ({productReviews?.length || 0})</h5>
 
             <div className="reviews-scroll-area" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-              {product.reviews && product.reviews.length > 0 ? (
-                product.reviews.map((review, index) => (
+              {productReviews && productReviews.length > 0 ? (
+                productReviews.map((review, index) => (
                   <div className="oneTab" key={index} style={{ display: 'flex', marginBottom: '20px', borderBottom: '1px solid #f9f9f9', paddingBottom: '15px' }}>
                     <img className="comment-avatar" src={avatar} alt="Avatar" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '15px' }} />
                     <div className="Username" style={{ flex: 1 }}>
@@ -272,27 +311,49 @@ const handleAddComment = async () => {
           
           <div className="mainImg">
             <img src={activeImg || images[0]} alt={product.tovarName} />
-            <div className="size" style={{ marginTop: '20px' }}>
+            <div className="size">
               <p style={{ fontWeight: '500', marginBottom: '10px' }}>Select Size</p>
-              {["XS", "S", "M", "L", "XL", "XXL"].map((s) => (
-                <button 
-                  key={s}
-                  disabled={product.size && product.size[s] === false}
-                  onClick={() => setSelectedSize(s)}
-                  style={getBtnStyle(s)}
-                >
-                  {s}
-                </button>
-              ))}
+              {sizeOptions.map((s) => {
+                const isAvailable = product.sizes ? product.sizes.includes(s) : false;
+                return (
+                  <button 
+                    key={s}
+                    onClick={() => isAvailable && setSelectedSize(s)}
+                    className={getSizeBtnClass(s)}
+                    disabled={!isAvailable}
+                  >
+                    {s}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           <div className="title-container">
             <div className="info">
               <h2 className="product-title">{product.tovarName}</h2>
-              <p style={{ color: '#757575' }}>{product.tovarClass}</p>
+              <p style={{ color: '#757575', marginBottom: '6px' }}>{product.tovarClass}</p>
+              {product.color && (
+                <p style={{ color: '#555', marginBottom: '10px', fontWeight: '500' }}>
+                  Color: <span style={{ color: '#000', fontWeight: '700' }}>{product.color}</span>
+                </p>
+              )}
               <span className="card-price">
-                <p style={{ fontSize: '22px', fontWeight: '600' }}>{product.tovarPrice}$</p>
+                {product.discount && product.discount > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <p style={{ fontSize: '18px', textDecoration: 'line-through', color: '#999', margin: 0 }}>
+                      ${product.tovarPrice || product.price}
+                    </p>
+                    <p style={{ fontSize: '24px', fontWeight: '700', color: '#e74c3c', margin: 0 }}>
+                      ${Math.round((product.tovarPrice || product.price) * (1 - product.discount / 100))}
+                    </p>
+                    <span style={{ fontSize: '14px', color: '#e74c3c', fontWeight: '500' }}>
+                      -{product.discount}% OFF
+                    </span>
+                  </div>
+                ) : (
+                  <p style={{ fontSize: '22px', fontWeight: '600' }}>${product.tovarPrice || product.price}</p>
+                )}
               </span>
             </div>
 
@@ -333,24 +394,36 @@ const handleAddComment = async () => {
             </div>
             
             <div className="mark-desc">
-              <li style={{ listStyle: 'none' }}>Colour: {product.color || "Default"}</li>
-              <li style={{ listStyle: 'none' }}>Style: IB3363-{product.id}</li>
+              <li style={{ listStyle: 'none' }}>Variants: {product.variants && product.variants.length > 0 ? product.variants.map(v => v.name).join(', ') : "Default"}</li>
+              <li style={{ listStyle: 'none' }}>Style: IB3363-{product.id || product._id}</li>
             </div>
           </div>
         </div>
 
         <div className="reviews-section">
-           {/* Блок з відгуками під товаром */}
            <div className="shown-colors">
-            {allVariants.map((item) => (
-              <Link key={item.id} to={`/product/${item.id}`}>
-                <img 
-                  src={typeof item.productImg === 'object' ? Object.values(item.productImg)[0] : item.productImg} 
-                  alt="variant" 
-                  style={{ border: item.id === product.id ? "2px solid black" : "1px solid #ddd" }}
-                />
-              </Link>
-            ))}
+            {product.variants && product.variants.length > 0 ? (
+              product.variants.map((variant) => (
+                <Link key={variant.id} to={`/product/${variant.id}`}>
+                  <img 
+                    src={getVariantImage(variant)} 
+                    alt={variant.name} 
+                    style={{ border: variant.id === product.id || variant.id === product._id ? "2px solid black" : "1px solid #ddd", borderRadius: '8px' }}
+                    title={variant.name}
+                  />
+                </Link>
+              ))
+            ) : (
+              allVariants.map((item) => (
+                <Link key={item.id || item._id} to={`/product/${item.id || item._id}`}>
+                  <img 
+                    src={getVariantImage(item)} 
+                    alt={item.tovarName || item.name || "variant"} 
+                    style={{ border: item.id === product.id || item._id === product._id ? "2px solid black" : "1px solid #ddd", borderRadius: '8px' }}
+                  />
+                </Link>
+              ))
+            )}
           </div> 
           
           <div className="User_comment">

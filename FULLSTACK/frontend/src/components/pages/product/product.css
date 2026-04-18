@@ -162,6 +162,18 @@
     border-color: #000;
 }
 
+.size button.selected {
+    background: black;
+    color: white;
+}
+
+.size button.unavailable,
+.size button:disabled {
+    background: #f5f5f5;
+    color: #cccccc;
+    cursor: not-allowed;
+}
+
 /* Інформаційна панель (права сторона) */
 .title-container {
     width: 450px;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Card from "../card/Card.jsx";
+import { backendUrl } from "../../Context.jsx";
 
 function SearchPage() {
   const [searchParams] = useSearchParams();
@@ -11,7 +12,7 @@ function SearchPage() {
   useEffect(() => {
     if (query) {
       setIsSearching(true);
-      fetch(`http://localhost:4200/products?q=${encodeURIComponent(query)}`)
+      fetch(`${backendUrl}/products?q=${encodeURIComponent(query)}`)
         .then((res) => res.json())
         .then((data) => {
           setResults(data);

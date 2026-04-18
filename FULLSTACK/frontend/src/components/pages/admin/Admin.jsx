@@ -139,11 +139,14 @@ function Admin() {
           <Link to="/admin-page" className="nav-item active">
             <span className="material-symbols-outlined">dashboard</span> Dashboard
           </Link>
-          <Link to="/admin-page/orders" className="nav-item">
-            <span className="material-symbols-outlined">shopping_cart</span> Orders
+          <Link to="/admin-page/products" className="nav-item">
+            <span className="material-symbols-outlined">inventory</span> Products
           </Link>
           <Link to="/admin-page/add-product" className="nav-item">
             <span className="material-symbols-outlined">add_box</span> Add Product
+          </Link>
+          <Link to="/admin-page/orders" className="nav-item">
+            <span className="material-symbols-outlined">shopping_cart</span> Orders
           </Link>
           <Link to="/admin-page/users" className="nav-item">
             <span className="material-symbols-outlined">group</span> Customers
@@ -157,11 +160,7 @@ function Admin() {
 
       <main className="admin-main">
         <Container fluid className="px-4 py-4">
-          <header className="main-header mb-4 d-flex justify-content-end align-items-center">
-            <div className="user-profile">
-              <img src={`https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff`} alt="avatar" />
-            </div>
-          </header>
+          
 
           <section className="welcome-section mb-5">
             <h2 className="fw-bold">Store Analytics</h2>

@@ -1,3 +1,86 @@
+/* --- Updated Styles for Image Gallery --- */
+
+/* Контейнер для сітки зображень */
+.image-preview-grid {
+  display: flex;
+  flex-wrap: nowrap; /* Зображення будуть в один рядок */
+  overflow-x: auto;  /* Додаємо горизонтальний скрол, якщо фото багато */
+  gap: 15px;
+  padding: 10px;
+  min-height: 150px;
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: 15px;
+  align-items: center;
+}
+
+/* Приховуємо стандартний скролбар для чистоти інтерфейсу (опціонально) */
+.image-preview-grid::-webkit-scrollbar {
+  height: 6px;
+}
+.image-preview-grid::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* Стиль кожної картки зображення */
+.image-preview-item {
+  position: relative;
+  flex: 0 0 auto; /* Забороняємо стискання, щоб картинки тримали розмір */
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 2px solid white;
+  transition: transform 0.2s ease;
+}
+
+.image-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Картинка заповнює квадрат без деформації */
+}
+
+/* Кнопка видалення поверх картинки */
+.delete-photo-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(239, 68, 68, 0.9) !important;
+  border: none !important;
+  color: white !important;
+  font-size: 16px;
+  z-index: 2;
+  cursor: pointer;
+}
+
+/* Вирівнювання полів форми */
+.admin-main .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.admin-main .form-control, 
+.admin-main .form-select {
+  height: 48px; /* Однакова висота для інпутів та селектів */
+}
+
+.admin-main textarea.form-control {
+  height: auto; /* Для опису висота залишається автоматичною */
+}
+
+/* Адаптація кнопки */
+.publish-btn-container {
+  margin-top: auto; /* Притискає кнопку до низу, якщо форма коротка */
+}
+
 /* Sidebar Styles */
 .admin-layout {
   display: flex;

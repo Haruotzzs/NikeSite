@@ -26,6 +26,8 @@ import Addproduct from "./components/pages/admin/Addproduct.jsx";
 import Admin from "./components/pages/admin/Admin.jsx";
 import Orders from "./components/pages/admin/Orders.jsx";
 import Consumers from "./components/pages/admin/Consumers.jsx";
+import Products from "./components/pages/admin/Products.jsx";
+import Discounts from "./components/pages/admin/Discounts.jsx";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -183,8 +185,10 @@ function App() {
 
         {/* admin page */}
         <Route path="/admin-page" element={<Admin />} />
+        <Route path="/admin-page/products" element={<Products />} />
         <Route path="/admin-page/add-product" element={<Addproduct />} />
         <Route path="/admin-page/orders" element={<Orders />} />
+        <Route path="/admin-page/discounts" element={<Discounts />} />
         <Route path="/admin-page/users" element={<Consumers />} />
 
 
