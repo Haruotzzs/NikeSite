@@ -182,11 +182,11 @@ function Products() {
                                   {product.price} ₴
                                 </span>
                                 <span style={{ color: '#e74c3c', fontWeight: 'bold' }}>
-                                  {Math.round(product.price * (1 - product.discount / 100))} ₴
+                                  {Math.round(product.price * (1 - product.discount / 100))} $
                                 </span>
                               </div>
                             ) : (
-                              <>{product.price} ₴</>
+                              <>{product.price} $</>
                             )}
                           </td>
                           <td>{product.sizes && product.sizes.length > 0 ? product.sizes.join(', ') : 'N/A'}</td>

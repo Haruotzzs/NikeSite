@@ -1,16 +1,13 @@
-/* ==========================================================================
-   МОДАЛЬНЕ ВІКНО (Comments Pool)
-   ========================================================================== */
 .Comments-pool {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* Темний напівпрозорий фон */
-    backdrop-filter: blur(6px); /* Розмиття заднього плану */
+    background-color: rgba(0, 0, 0, 0.5); 
+    backdrop-filter: blur(6px); 
     z-index: 9999;
-    display: none; /* Контролюється через React inline style: display: showComments ? "flex" : "none" */
+    display: none; 
     justify-content: center;
     align-items: center;
 }
@@ -21,7 +18,7 @@
     width: 600px;
     
     max-width: 90%;
-    max-height: 87vh; /* Щоб не виходило за межі екрану на малих пристроях */
+    max-height: 87vh;
     border-radius: 15px;
     padding: 30px;
     display: flex;
@@ -42,7 +39,6 @@
     z-index: 10;
 }
 
-/* Шапка товару всередині модалки */
 .modal-product-summary {
     display: flex;
     gap: 15px;
@@ -70,7 +66,6 @@
     font-size: 14px;
 }
 
-/* Область скролу відгуків */
 .reviews-scroll-area {
     overflow-y: auto;
     margin-top: 10px;
@@ -78,7 +73,6 @@
     padding-right: 10px;
 }
 
-/* Стилізація скролбару */
 .reviews-scroll-area::-webkit-scrollbar {
     width: 5px;
 }
@@ -87,9 +81,6 @@
     border-radius: 10px;
 }
 
-/* ==========================================================================
-   ОСНОВНИЙ КОНТЕЙНЕР ТОВАРУ
-   ========================================================================== */
 .product-container {
     display: flex;
     width: 100%;
@@ -98,7 +89,6 @@
     margin: 0 auto;
 }
 
-/* Бокова колонка з прев'ю фото */
 .size-img {
     display: flex;
     flex-direction: column;
@@ -125,7 +115,6 @@
     border-color: #000;
 }
 
-/* Головне зображення */
 .mainImg {
     display: flex;
     flex-direction: column;
@@ -140,7 +129,6 @@
     object-fit: cover;
 }
 
-/* Блок вибору розміру */
 .size {
     display: flex;
     flex-wrap: wrap;
@@ -174,7 +162,6 @@
     cursor: not-allowed;
 }
 
-/* Інформаційна панель (права сторона) */
 .title-container {
     width: 450px;
     padding: 0 30px;
@@ -206,7 +193,6 @@
     margin-bottom: 5px;
 }
 
-/* Кнопки Add to Bag / Like */
 .Btn_container {
     margin: 30px 0;
 }
@@ -243,9 +229,6 @@
     background-color: #f5f5f5;
 }
 
-/* ==========================================================================
-   СЕКЦІЯ ВІДГУКІВ ТА ВАРІАНТІВ (Нижня частина)
-   ========================================================================== */
 .reviews-section {
     display: flex;
     justify-content: center;
@@ -299,7 +282,6 @@
     font-weight: bold;
 }
 
-/* Кнопка Write a Review */
 .write-review {
     cursor: pointer;
     display: flex;
@@ -319,7 +301,6 @@
     background-color: #f9f9f9;
 }
 
-/* Картка одного відгуку */
 .oneTab {
     display: flex;
     margin-bottom: 20px;
@@ -369,42 +350,38 @@
     left: 0;
 }
 
-/* Контейнер для верхнього повзунка */
 .custom-scrollbar-container {
-    width: 200px; /* або інша ширина вашого блоку контролів */
+    width: 200px;
     height: 2px;
     background-color: #eee;
-    position: relative; /* Обов'язково! */
+    position: relative;
     overflow: hidden;
 }
 
 .custom-scrollbar-thumb {
-    position: absolute; /* Обов'язково! */
+    position: absolute; 
     top: 0;
     left: 0;
-    width: 30%; /* Ширина повзунка */
+    width: 30%; 
     height: 100%;
     background-color: #000;
-    transition: left 0.1s ease-out; /* Плавність руху */
+    transition: left 0.1s ease-out; 
     will-change: left;
 }
 
-/* Налаштування самого списку */
 .recommendations-scroll {
     display: flex;
-    overflow-x: auto; /* Вмикає горизонтальний скрол */
+    overflow-x: auto; 
     gap: 20px;
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch; /* Плавність для iOS */
+    -webkit-overflow-scrolling: touch; 
 }
 
-/* Стиль для Card всередині слайдера, щоб вони мали фіксовану ширину */
 .recommendations-scroll .card {
     flex-shrink: 0 !important;
     width: 375px !important;
 }
 
-/* Приховуємо стандартний скролбар знизу */
 .recommendations-scroll::-webkit-scrollbar {
     display: none;
 }

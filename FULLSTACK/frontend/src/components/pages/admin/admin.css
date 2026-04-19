@@ -1,10 +1,9 @@
 /* --- Updated Styles for Image Gallery --- */
 
-/* Контейнер для сітки зображень */
 .image-preview-grid {
   display: flex;
-  flex-wrap: nowrap; /* Зображення будуть в один рядок */
-  overflow-x: auto;  /* Додаємо горизонтальний скрол, якщо фото багато */
+  flex-wrap: nowrap;
+  overflow-x: auto;  
   gap: 15px;
   padding: 10px;
   min-height: 150px;
@@ -14,7 +13,6 @@
   align-items: center;
 }
 
-/* Приховуємо стандартний скролбар для чистоти інтерфейсу (опціонально) */
 .image-preview-grid::-webkit-scrollbar {
   height: 6px;
 }
@@ -23,10 +21,9 @@
   border-radius: 10px;
 }
 
-/* Стиль кожної картки зображення */
 .image-preview-item {
   position: relative;
-  flex: 0 0 auto; /* Забороняємо стискання, щоб картинки тримали розмір */
+  flex: 0 0 auto;
   width: 120px;
   height: 120px;
   border-radius: 12px;
@@ -39,10 +36,9 @@
 .image-preview-item img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Картинка заповнює квадрат без деформації */
+  object-fit: cover;
 }
 
-/* Кнопка видалення поверх картинки */
 .delete-photo-btn {
   position: absolute;
   top: 5px;
@@ -62,26 +58,23 @@
   cursor: pointer;
 }
 
-/* Вирівнювання полів форми */
 .admin-main .form-group {
   margin-bottom: 1.5rem;
 }
 
 .admin-main .form-control, 
 .admin-main .form-select {
-  height: 48px; /* Однакова висота для інпутів та селектів */
+  height: 48px;
 }
 
 .admin-main textarea.form-control {
-  height: auto; /* Для опису висота залишається автоматичною */
+  height: auto;
 }
 
-/* Адаптація кнопки */
 .publish-btn-container {
-  margin-top: auto; /* Притискає кнопку до низу, якщо форма коротка */
+  margin-top: auto;
 }
 
-/* Sidebar Styles */
 .admin-layout {
   display: flex;
   min-height: 100vh;
@@ -149,7 +142,7 @@
 /* Main Area Styles */
 .admin-main {
   flex: 1;
-  margin-left: 260px; /* Відступ для сайдбару */
+  margin-left: 260px;
   background: #f4f7fe;
 }
 
@@ -239,9 +232,7 @@
 
 .badge-status.new { background: #e0f2fe; color: #0284c7; }
 
-/* --- Стилі для форми додавання товару --- */
 
-/* Контейнер форми */
 .content-card {
   background: white;
   border-radius: 20px;
@@ -249,7 +240,6 @@
   transition: transform 0.2s ease;
 }
 
-/* Стилізація полів вводу */
 .admin-main .form-label {
   color: #475569;
   font-size: 0.9rem;
@@ -272,7 +262,6 @@
   background-color: #fff;
 }
 
-/* Зона завантаження зображення */
 .image-upload-area {
   border: 2px dashed #cbd5e1 !important;
   background: #f8fafc !important;
@@ -301,7 +290,6 @@
   margin-bottom: 10px;
 }
 
-/* Кастомна кнопка "Опублікувати" */
 .admin-main .btn-primary {
   background: #6366f1;
   border: none;
@@ -322,7 +310,6 @@
   transform: none;
 }
 
-/* Анімація появи (для плавного переходу) */
 .admin-main {
   animation: fadeIn 0.5s ease-in-out;
 }
@@ -332,7 +319,6 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Адаптивність для мобільних (якщо захочеш зайти з телефону) */
 @media (max-width: 992px) {
   .admin-sidebar {
     width: 80px;
@@ -351,7 +337,6 @@
 
 
 /* order */
-/* Контейнер таблиці */
 .orders-table-container {
   background: white;
   border-radius: 12px;
@@ -361,11 +346,11 @@
 
 .custom-admin-table {
   border-collapse: separate;
-  border-spacing: 0 4px; /* Менший відступ між рядками */
+  border-spacing: 0 4px;
 }
 
 .custom-admin-table thead th {
-  background: #f8fafc !important; /* Легкий фон для заголовків */
+  background: #f8fafc !important;
   color: #64748b !important;
   font-size: 11px !important;
   font-weight: 600;
@@ -375,7 +360,6 @@
   padding: 12px 20px !important;
 }
 
-/* Рядки таблиці */
 .order-row {
   transition: background 0.2s ease;
 }
@@ -401,13 +385,12 @@
 }
 
 .order-row:hover td {
-  background: #fcfdfe !important; /* Майже непомітна зміна кольору */
+  background: #fcfdfe !important;
 }
 
-/* Елементи рядка */
 .order-id-text { 
   font-weight: 600; 
-  color: #0f172a; /* Темний замість яскраво-фіолетового */
+  color: #0f172a;
   font-size: 0.9rem; 
 }
 .order-date-text { font-size: 0.8rem; color: #94a3b8; }
@@ -415,7 +398,7 @@
 .client-info { display: flex; align-items: center; gap: 10px; }
 .client-avatar {
   width: 32px; height: 32px; 
-  background: #f1f5f9; /* Нейтральний фон */
+  background: #f1f5f9;
   color: #475569; 
   border-radius: 6px; 
   display: flex; align-items: center; justify-content: center;
@@ -435,7 +418,6 @@
 
 .order-amount { font-weight: 600; color: #0f172a; }
 
-/* Статуси: Мінімалізм (Текст + Кольорова крапка) */
 .status-pill {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 4px 0; /* Прибрали кольоровий фон */
@@ -444,14 +426,13 @@
 }
 .status-pill .dot { width: 7px; height: 7px; border-radius: 50%; }
 
-/* Нейтральні кольори для точок */
-.status-pill.new .dot { background: #3b82f6; } /* Спокійний синій */
-.status-pill.processing .dot { background: #f59e0b; } /* Стриманий помаранчевий */
-.status-pill.shipped .dot { background: #8b5cf6; } /* М'який фіолетовий */
-.status-pill.completed .dot { background: #10b981; } /* Глибокий зелений */
+.status-pill.new .dot { background: #3b82f6; }
+.status-pill.processing .dot { background: #f59e0b; } 
+.status-pill.shipped .dot { background: #8b5cf6; }
+.status-pill.completed .dot { background: #10b981; }
 
 .btn-print-custom {
-  background: #1e293b; /* Глибокий темно-сірий замість фіолетового */
+  background: #1e293b;
   border: none; border-radius: 6px;
   font-size: 0.85rem;
   padding: 8px 16px;
@@ -473,33 +454,11 @@
   color: #64748b;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Група кнопок у рядку */
 .action-button-group {
   display: flex;
   align-items: center;
 }
 
-/* Базовий стиль кнопки статусу */
 .btn-status {
   border: none;
   border-radius: 6px;
@@ -518,7 +477,6 @@
   color: #64748b;
 }
 
-/* Ефекти наведення та активного стану */
 .btn-status:hover {
   filter: brightness(0.9);
   transform: translateY(-1px);
@@ -530,7 +488,6 @@
   transform: none;
 }
 
-/* Кольорові схеми */
 .btn-status-new.active { background-color: #3b82f6; color: white; }
 .btn-status-new:hover:not(.active) { background-color: #dbeafe; color: #1e40af; }
 
@@ -543,7 +500,6 @@
 .btn-status-done.active { background-color: #10b981; color: white; }
 .btn-status-done:hover:not(.active) { background-color: #d1fae5; color: #065f46; }
 
-/* Кнопка видалення */
 .btn-status-delete {
   background-color: transparent;
   color: #ef4444;
@@ -559,7 +515,6 @@
   font-size: 18px;
 }
 
-/* Розділювач */
 .button-divider {
   width: 1px;
   height: 20px;
@@ -571,17 +526,6 @@
 .items-status {
   width: 120px;
 }
-
-
-
-
-
-
-
-
-
-
-/* admin.css */
 
 :root {
   --admin-bg: #f8f9fa;

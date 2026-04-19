@@ -378,7 +378,7 @@ const [productData, setProductData] = useState({
                         <Col md={6}>
                           <Form.Group className="mb-4">
                             <Form.Label style={{ display: 'block', fontWeight: '600', color: '#555', marginBottom: '8px' }}>
-                              Cost (₴)
+                              Cost ($)
                             </Form.Label>
                             <Form.Control 
                               type="number" name="price" required 

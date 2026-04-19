@@ -218,7 +218,7 @@ function Admin() {
             <Col lg={12}>
               <div className="content-card border-0 shadow-sm">
                 <div className="card-header-v2">
-                  <h5 className="mb-0">Recent Orders</h5>
+                <h5 className="mb-0" style={{ fontWeight: '800', padding: '10px 0 0 20px ' }}>Recent Orders</h5>
                 
                 </div>
                 <div className="p-0">
@@ -254,7 +254,7 @@ function Admin() {
                               <span className="text-muted">{order.itemsCount} items</span>
                             </td>
                             <td>
-                              <span className="fw-bold">{order.totalAmount} ₴</span>
+                              <span className="fw-bold">{order.totalAmount} $</span>
                             </td>
                             <td>
                                <span className={`badge-status ${order.status}`}>

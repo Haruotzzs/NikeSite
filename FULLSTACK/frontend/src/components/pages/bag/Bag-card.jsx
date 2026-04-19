@@ -46,7 +46,7 @@ function Bagcard() {
     return () => unsubscribeAuth();
   }, [navigate]);
 
-  // Додаємо деталі про товари з контексту
+  // add product details to bag items
   useEffect(() => {
     const enriched = bagElements.map((bagItem) => {
       const fullProduct = allProducts.find(
@@ -55,29 +55,29 @@ function Bagcard() {
       
       return {
         ...bagItem,
-        ...fullProduct, // Додаємо всі деталі товару з контексту
+        ...fullProduct, // add all product details to bag item
       };
     });
 
     setEnrichedBagElements(enriched);
   }, [bagElements, allProducts]);
 
-  // ФУНКЦІЯ ОНОВЛЕННЯ ТА ВИДАЛЕННЯ
+  // delete or update quantity
   const updateQuantity = async (index, change) => {
     const user = auth.currentUser;
     if (!user) return;
 
-    // Робимо глибоку копію масиву
+    // copy bag elements to modify
     let updatedBag = [...bagElements];
     const currentProduct = { ...updatedBag[index] };
     
     const newCount = (currentProduct.bagProductCount || 1) + change;
 
     if (newCount > 0) {
-      // Оновлюємо кількість
+      // update count if it's above 0
       updatedBag[index] = { ...currentProduct, bagProductCount: newCount };
     } else {
-      // ВИДАЛЕННЯ: якщо кількість стає 0, видаляємо елемент за індексом
+      // delete if count goes to 0
       updatedBag = updatedBag.filter((_, i) => i !== index);
     }
 
@@ -91,7 +91,7 @@ function Bagcard() {
     }
   };
 
-  // Розрахунок загальної суми кошика (Total)
+  // amount calculation
   const calculateTotal = () => {
     return enrichedBagElements.reduce((total, item) => {
       const price = Number(item.tovarPrice || item.price || item.tovarPrice || 0);
@@ -121,7 +121,7 @@ function Bagcard() {
       ) : (
         <div className="bag-content-wrapper" style={{ display: "flex", gap: "20px" }}>
           
-          {/* ЛІВА ЧАСТИНА: СПИСОК ТОВАРІВ */}
+          {/* LEFT COLUMN: LIST OF PRODUCTS */}
           <div className="card-container1" style={{ flex: 2 }}>
             
             {enrichedBagElements.map((product, index) => {
@@ -153,7 +153,7 @@ function Bagcard() {
                           <h2 className="card-title1">{product.tovarName}</h2>
                         </Link>
                         <p className="card-price">
-                          {(Number(product.tovarPrice || product.price || 0) * (product.bagProductCount || 1)).toFixed(2)}₴
+                          {(Number(product.tovarPrice || product.price || 0) * (product.bagProductCount || 1)).toFixed(2)}$
                         </p>
                       </div>
                       
@@ -174,34 +174,34 @@ function Bagcard() {
             })}
           </div>
 
-          {/* ПРАВА ЧАСТИНА: ПІДСУМОК (SUMMARY) */}
+          {/* RIGHT COLUMN: SUMMARY */}
           
-            <div className="summary-box-v2">
-  <h2 className="summary-title">Summary</h2>
-  
-  <div className="summary-row">
-    <span>Subtotal</span>
-    <span>{calculateTotal()}₴</span>
-  </div>
-  
-  <div className="summary-row">
-    <span>Estimated Shipping</span>
-    <span className="shipping-free">Free</span>
-  </div>
-  
-  <div className="summary-divider" />
-  
-  <div className="summary-row total-row">
-    <span>Total</span>
-    <span className="total-amount">{calculateTotal()}₴</span>
-  </div>
+          <div className="summary-box-v2">
+            <h2 className="summary-title">Summary</h2>
+            
+            <div className="summary-row">
+              <span>Subtotal</span>
+              <span>{calculateTotal()}$</span>
+            </div>
+            
+            <div className="summary-row">
+              <span>Estimated Shipping</span>
+              <span className="shipping-free">Free</span>
+            </div>
+            
+            <div className="summary-divider" />
+            
+            <div className="summary-row total-row">
+              <span>Total</span>
+              <span className="total-amount">{calculateTotal()}$</span>
+            </div>
 
-  <button className="checkout-action-btn" onClick={() => navigate("/checkout")}>
-    Checkout
-  </button>
-  
-  <p className="summary-note">Taxes and shipping calculated at checkout</p>
-</div>
+            <button className="checkout-action-btn" onClick={() => navigate("/checkout")}>
+              Checkout
+            </button>
+            
+            <p className="summary-note">Taxes and shipping calculated at checkout</p>
+          </div>
           
 
         </div>

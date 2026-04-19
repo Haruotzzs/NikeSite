@@ -4,7 +4,7 @@
   font-family: 'Inter', sans-serif; /* Рекомендую підключити цей шрифт */
 }
 
-/* Хедер */
+/* Header */
 .profile-header {
   display: flex;
   justify-content: space-between;
@@ -74,7 +74,7 @@
   font-size: 18px;
 }
 
-/* Картки статистики */
+/* stat cards */
 .stats-container {
   display: flex;
   gap: 15px;
@@ -108,7 +108,7 @@
   letter-spacing: 0.5px;
 }
 
-/* Таби */
+/* tabs */
 .modern-tabs {
   display: flex;
   gap: 40px;
@@ -155,7 +155,6 @@
 
 
 /* comments */
-/* Контейнер списку відгуків */
 .profile-reviews-list {
     display: flex;
     flex-direction: column;
@@ -164,23 +163,8 @@
     margin-top: 10px;
 }
 
-/* Картка одного відгуку */
-.review-history-item {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    background: #fff;
-    border: 1px solid #eee;
-    border-radius: 15px;
-    transition: transform 0.2s ease;
-}
 
-.review-history-item:hover {
-    border-color: #ddd;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-}
 
-/* Міні-прев'ю товару зліва */
 .review-product-preview {
     display: flex;
     gap: 12px;
@@ -213,12 +197,11 @@
 
 .preview-price {
     font-size: 12px;
-    color: #27ae60; /* Зелений колір для "Verified Purchase" */
+    color: #27ae60; 
     margin: 0;
     font-weight: 500;
 }
 
-/* Контент відгуку справа */
 .review-content-body {
     flex: 1;
     display: flex;
@@ -251,7 +234,6 @@
     font-style: italic;
 }
 
-/* Стан коли відгуків немає */
 .empty-reviews {
     text-align: center;
     padding: 50px;
@@ -265,7 +247,6 @@
     margin-bottom: 10px;
 }
 
-/* Адаптивність */
 @media (max-width: 768px) {
     .review-history-item {
         flex-direction: column;
@@ -277,7 +258,7 @@
         min-width: 100%;
     }
 }
-/* Оновлена палітра для профілю */
+
 :root {
   --main-black: #000000;
   --main-grey: #f5f5f5;
@@ -286,7 +267,6 @@
   --accent-orange: #ff7f4d;
 }
 
-/* Картки статистики */
 .stat-card {
   background: var(--main-white);
   padding: 15px 25px;
@@ -294,56 +274,31 @@
   border: 1px solid var(--main-grey);
   text-align: center;
   min-width: 100px;
-  transition: all 0.3s ease; /* Плавний перехід для тіні */
+  transition: all 0.3s ease; 
 }
 
 .stat-card:hover {
-  border-color: var(--main-grey); /* Контур залишається сірим */
-  transform: translateY(-2px); /* Легке підняття */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); /* М'яка тінь замість чорного контуру */
+  border-color: var(--main-grey); 
+  transform: translateY(-2px); 
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); 
 }
 
-/* Картка одного відгуку */
 .review-history-item {
   display: flex;
   gap: 20px;
   padding: 20px;
   background: var(--main-white);
   border: 1px solid var(--main-grey);
-  border-radius: 0; /* Гострий стиль одягу */
-  transition: all 0.3s ease;
+  border-radius: 0;
 }
 
-.review-history-item:hover {
-  border-color: var(--main-grey); /* Контур не змінюється на чорний */
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06); /* Елегантна тінь */
-  transform: scale(1.005); /* Мінімальне збільшення */
-}
 
-/* Кнопка зміни аватара */
-.edit-avatar-btn {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: var(--main-black);
-  color: var(--main-white);
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-}
 
 .edit-avatar-btn:hover {
   background: var(--accent-orange);
   box-shadow: 0 4px 10px rgba(255, 127, 77, 0.3);
 }
 
-/* Таби (кнопки меню) */
 .tab-btn {
   background: none;
   border: none;
@@ -374,10 +329,9 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: var(--accent-orange); /* Ваш колір акценту */
+  background: var(--accent-orange); 
 }
 
-/* Секція "Verified Purchase" або ціна */
 .preview-price {
   font-size: 12px;
   color: var(--accent-orange);
@@ -387,16 +341,6 @@
   letter-spacing: 0.5px;
 }
 
-
-
-
-
-
-
-
-
-
-/* Оверлей (фон за модалкою) */
 .address-modal-overlay {
   position: fixed;
   top: 0;
@@ -404,7 +348,7 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(5px); /* Розмиття фону */
+  backdrop-filter: blur(5px); 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -412,7 +356,6 @@
   animation: fadeIn 0.3s ease;
 }
 
-/* Контент модалки */
 .address-modal-content {
   background: white;
   width: 90%;
@@ -488,7 +431,7 @@
 }
 
 .save-btn-custom:hover {
-  background: #ff7f4d; /* Ваш акцентний помаранчевий */
+  background: #ff7f4d; 
   box-shadow: 0 5px 15px rgba(255, 127, 77, 0.3);
 }
 
@@ -501,7 +444,6 @@
   color: #ff7f4d;
 }
 
-/* Анімації */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -515,18 +457,18 @@
 
 
 .address-modal-content.wide {
-  max-width: 550px; /* Трохи ширше для двох колонок */
+  max-width: 550px;
 }
 
 .modal-body-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Дві колонки */
+  grid-template-columns: 1fr 1fr; 
   gap: 15px;
   margin-top: 15px;
 }
 
 .input-group-full {
-  grid-column: span 2; /* Поле на всю ширину */
+  grid-column: span 2;
   display: flex;
   flex-direction: column;
   gap: 5px;

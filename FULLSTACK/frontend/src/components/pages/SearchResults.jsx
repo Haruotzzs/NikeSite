@@ -27,16 +27,19 @@ function SearchPage() {
     }
   }, [query]);
 
-  // Якщо йде пошук — не рендеримо Card, щоб не було стрибків контенту
   if (isSearching) return <div style={{ textAlign: "center", padding: "50px" }}>Searching...</div>;
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", minHeight: "50vh" }}>
-      {results.length > 0 ? (
-        <Card items={results} />
-      ) : (
-        query && <h2 style={{ marginTop: "50px" }}>No results found for "{query}"</h2>
-      )}
+    <div>
+      <h2 style={{ display: "flex", justifyContent: "center", padding: "20px" }}>Search Results for "{query}"</h2>
+      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", minHeight: "50vh" }}>
+        
+        {results.length > 0 ? (
+          <Card items={results} />
+        ) : (
+          query && <h2 style={{ marginTop: "50px" }}>No results found for "{query}"</h2>
+        )}
+      </div>
     </div>
   );
 }
