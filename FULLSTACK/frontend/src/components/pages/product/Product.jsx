@@ -46,9 +46,9 @@ const Product = () => {
    * Calculates the average star rating based on current reviews.
    */
   const calculateAverageRating = () => {
-    if (!product || product.reviews.length === 0) return 0;
-    const total = product.reviews.reduce((sum, review) => sum + Number(review.rating), 0);
-    const average = total / product.reviews.length;
+    if (!productReviews || productReviews.length === 0) return 0;
+    const total = productReviews.reduce((sum, review) => sum + Number(review.rating), 0);
+    const average = total / productReviews.length;
     return average.toFixed(1);
   };
 
@@ -80,11 +80,11 @@ const Product = () => {
     };
 
     try {
-  const response = await fetch(`${backendUrl}/products`, {
+  const response = await fetch(`${backendUrl}/products/review`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      productId: product.id,
+      productId: product._id,
       userId: reviewData.userId,
       user: reviewData.user,
       comment: reviewData.comment,
@@ -156,6 +156,8 @@ const Product = () => {
         const response = await fetch(`${backendUrl}/products/${id}`);
         if (response.ok) {
           const data = await response.json();
+          setProductReviews(data.reviews || []);
+        } else {
           setProductReviews(product?.reviews || []);
         }
       } catch (error) {
@@ -315,12 +317,14 @@ const Product = () => {
               </div>
             </div>
 
-            <h5>Customer Reviews ({product?.reviews.length || 0})</h5>
+            <h5>Customer Reviews ({productReviews.length || 0})</h5>
 
             {/* List of existing reviews */}
             <div className="reviews-scroll-area" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-              {product?.reviews && product.reviews.length > 0 ? (
-                product.reviews.map((review, index) => (
+              {productReviews && productReviews.length > 0 ? (
+                [...productReviews]
+                  .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+                  .map((review, index) => (
                   <div className="oneTab" key={index} style={{ display: 'flex', marginBottom: '20px', borderBottom: '1px solid #f9f9f9', paddingBottom: '15px' }}>
                     <img className="comment-avatar" src={avatar} alt="Avatar" style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '15px' }} />
                     <div className="Username" style={{ flex: 1 }}>
@@ -332,6 +336,11 @@ const Product = () => {
                           ))}
                         </div>
                       </div>
+                      <p style={{ fontSize: '12px', color: '#aaa', margin: '3px 0 0' }}>
+                        {review.date
+                          ? new Date(review.date).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })
+                          : 'Processing...'}
+                      </p>
                       <div className="text" style={{ marginTop: '5px' }}>
                         <p style={{ fontSize: '14px', color: '#444' }}>{review.comment}</p>
                       </div>
@@ -509,7 +518,7 @@ const Product = () => {
                 </div> 
               </div>
             </div> 
-            <p style={{ marginBottom: '25px' }}>({product.reviews?.length || 0}) reviews</p>
+            <p style={{ marginBottom: '25px' }}>({productReviews?.length || 0}) reviews</p>
             
             {/* Trigger for Review Modal */}
             <button className="write-review" onClick={() => setShowComments(true)}>

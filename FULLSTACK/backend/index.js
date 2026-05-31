@@ -227,7 +227,7 @@ app.put("/products", async (req, res) => {
 });
 
 // REVIEWS PUT
-app.put("/products", async (req, res) => {
+app.put("/products/review", async (req, res) => {
     try {
         const {
             productId,
@@ -292,6 +292,16 @@ app.delete("/api/admin/products/:id", async (req, res) => {
     }
 });
 
+// GET: Total product count from MongoDB (for Admin dashboard)
+app.get("/api/admin/stats", async (req, res) => {
+    try {
+        const totalProducts = await Product.countDocuments();
+        res.json({ totalProducts });
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch stats" });
+    }
+});
+
 // GET: Fetch all products for admin
 app.get("/api/admin/products", async (req, res) => {
     try {
@@ -303,6 +313,17 @@ app.get("/api/admin/products", async (req, res) => {
 });
 
 // ===== PUBLIC PRODUCT ROUTES =====
+
+// GET: Fetch single product by ID (public)
+app.get("/products/:id", async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) return res.status(404).json({ error: "Product not found" });
+        res.json(product);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch product" });
+    }
+});
 
 // GET: Public search/list
 app.get("/products", async (req, res) => {

@@ -16,6 +16,7 @@ import {
   limit, 
   setDoc,
 } from "firebase/firestore";
+import { backendUrl } from "../../../Context.jsx";
 
 function Admin() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function Admin() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [stats, setStats] = useState({ orders: 0, products: 0, users: 0 });
   const [recentOrders, setRecentOrders] = useState([]);
+  const [totalProducts, setTotalProducts] = useState(null); // MongoDB product count
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
@@ -86,6 +88,17 @@ function Admin() {
         products: productsSnap.size,
         users: usersSnap.size
       });
+
+      // Fetch real product count from MongoDB
+      try {
+        const res = await fetch(`${backendUrl}/api/admin/stats`);
+        if (res.ok) {
+          const data = await res.json();
+          setTotalProducts(data.totalProducts);
+        }
+      } catch (e) {
+        console.error("Failed to fetch MongoDB stats:", e);
+      }
 
       const ordersArray = ordersSnap.docs.map(doc => {
         const data = doc.data();
@@ -185,8 +198,13 @@ function Admin() {
                   <span className="material-symbols-outlined">package_2</span>
                 </div>
                 <div className="stat-data">
-                  <span className="label">Products</span>
-                  <h3 className="value">{stats.products}</h3>
+                  <span className="label">Total Products</span>
+                  <h3 className="value">
+                    {totalProducts !== null ? totalProducts : stats.products}
+                  </h3>
+                  <span style={{ fontSize: "11px", color: "#aaa", marginTop: "2px", display: "block" }}>
+                    all time · {totalProducts !== null ? "MongoDB" : "Firestore"}
+                  </span>
                 </div>
               </div>
             </Col>

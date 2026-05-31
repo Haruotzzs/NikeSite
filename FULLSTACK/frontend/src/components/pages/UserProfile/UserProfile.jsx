@@ -4,36 +4,25 @@ import React, { useState, useContext, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../../server/firebase.js"; 
 
-// --- FIREBASE IMPORTS ---
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ProductContext } from "../../../Context.jsx";
 
-// --- SUB-COMPONENTS ---
 import Orders from "./bar/Orders.jsx";
 import Comments from "./bar/Comments.jsx";
 
-// --- UI COMPONENTS & ASSETS ---
 import Container from "react-bootstrap/Container";
 import NoneAvatarImg from "./none_avatar.jpg";
 
-/**
- * UserProfile Component
- * Manages user personal data (address, contacts) and displays activity (orders, reviews).
- */
 function UserProfile() {
   const navigate = useNavigate();
   const contextData = useContext(ProductContext);
-
-  // Memoize products to avoid unnecessary re-calculations of statistics
   const products = useMemo(() => contextData?.products || [], [contextData]);
 
-  // --- COMPONENT STATE ---
   const [username, setUsername] = useState("User");
   const [currentUser, setCurrentUser] = useState(null);
-  const [activeSection, setActiveSection] = useState("orders"); // Toggle between 'orders' and 'comments'
+  const [activeSection, setActiveSection] = useState("orders");
   
-  // Address State
   const [address, setAddress] = useState("Add delivery address");
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [addressDetails, setAddressDetails] = useState({
@@ -45,7 +34,6 @@ function UserProfile() {
     apartment: ""
   });
   
-  // Contact State
   const [showContactModal, setShowContactModal] = useState(false);
   const [contactDetails, setContactDetails] = useState({
     firstName: "",
@@ -54,20 +42,14 @@ function UserProfile() {
     email: ""
   });
 
-  // --- AUTHENTICATION & DATA FETCHING ---
   useEffect(() => {
-    // Listen for login/logout events
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user);
-        
         try {
-          // Fetch additional user data from Firestore using the user's UID
           const userDoc = await getDoc(doc(db, "users", user.uid));
           if (userDoc.exists()) {
             const data = userDoc.data();
-
-            // Sync Address Details
             if (data.addressDetails) {
               setAddressDetails(data.addressDetails);
               const d = data.addressDetails;
@@ -75,8 +57,6 @@ function UserProfile() {
                 setAddress(`${d.city}, ${d.street} ${d.house || ""}`);
               }
             }
-
-            // Sync Contact Details & Username logic
             if (data.contactDetails) {
               const c = data.contactDetails;
               setContactDetails({
@@ -85,8 +65,6 @@ function UserProfile() {
                 phone: c.phone || "",
                 email: c.email || user.email || ""
               });
-              
-              // Priority: Firestore Name > Google Display Name > Email Prefix
               const dbName = `${c.firstName || ""} ${c.lastName || ""}`.trim();
               setUsername(dbName || user.displayName || user.email?.split('@')[0] || "User");
             } else {
@@ -97,22 +75,17 @@ function UserProfile() {
           console.error("Firestore error:", err);
         }
       } else {
-        // If no user is logged in, redirect to the login page
         navigate("/login");
       }
     });
     return () => unsubscribe();
   }, [navigate]);
 
-  // --- EVENT HANDLERS ---
-
-  // Generic handler for nested object state updates
   const handleInputChange = (e, setter) => {
     const { name, value } = e.target;
     setter(prev => ({ ...prev, [name]: value }));
   };
 
-  // Save address details to Firestore using 'merge: true' to prevent overwriting other fields
   const handleSaveAddress = async () => {
     if (!currentUser) return;
     try {
@@ -126,7 +99,6 @@ function UserProfile() {
     }
   };
 
-  // Save contact information and update local username state
   const handleSaveContact = async () => {
     if (!currentUser) return;
     try {
@@ -138,18 +110,15 @@ function UserProfile() {
           email: contactDetails.email || currentUser.email
         }
       }, { merge: true });
-      
       const newName = `${contactDetails.firstName} ${contactDetails.lastName}`.trim();
       if (newName) setUsername(newName);
-      
       setShowContactModal(false);
     } catch (error) {
       console.error("Error saving contacts:", error);
     }
   };
 
-  // --- STATISTICS CALCULATION ---
-  // Filters all products to find reviews left by the current user
+  // --- FIX: use product._id (MongoDB ObjectId) and include product image URL ---
   const userStats = useMemo(() => {
     if (!products || !currentUser) return { count: 0, avg: 0, reviews: [] };
     const myReviews = [];
@@ -158,11 +127,16 @@ function UserProfile() {
       if (product.reviews && Array.isArray(product.reviews)) {
         const found = product.reviews
           .filter((r) => r.userId === currentUser.uid)
-          .map((r) => ({ 
-            ...r, 
-            productName: product.tovarName, 
-            productId: product.id,
-            productImg: product.productImg 
+          .map((r) => ({
+            ...r,
+            productName: product.tovarName,
+            productId: product._id,          // ← fixed: _id not id
+            productImg:                       // ← fixed: resolve Supabase URL
+              product.images && product.images.length > 0
+                ? product.images[0].url
+                : typeof product.productImg === "object"
+                  ? Object.values(product.productImg)[0]
+                  : product.productImg || null,
           }));
         myReviews.push(...found);
       }
@@ -178,7 +152,7 @@ function UserProfile() {
     <Container>
       <div className="profile-wrapper">
         
-        {/* --- ADDRESS MODAL --- */}
+        {/* ADDRESS MODAL */}
         {showAddressModal && (
           <div className="address-modal-overlay" onClick={() => setShowAddressModal(false)}>
             <div className="address-modal-content wide" onClick={(e) => e.stopPropagation()}>
@@ -214,7 +188,7 @@ function UserProfile() {
           </div>
         )}
 
-        {/* --- CONTACT MODAL --- */}
+        {/* CONTACT MODAL */}
         {showContactModal && (
           <div className="address-modal-overlay" onClick={() => setShowContactModal(false)}>
             <div className="address-modal-content wide" onClick={(e) => e.stopPropagation()}>
@@ -241,7 +215,7 @@ function UserProfile() {
           </div>
         )}
 
-        {/* --- PROFILE HEADER --- */}
+        {/* PROFILE HEADER */}
         <header className="profile-header">
           <div className="profile-main-info">
             <div className="avatar-container">
@@ -274,29 +248,29 @@ function UserProfile() {
           </div>
         </header>
 
-        {/* --- MAIN CONTENT AREA --- */}
-          <main className="profile-body">
-              <nav className="modern-tabs">
-          <button 
-            className={`tab-btn ${activeSection === "orders" ? "active" : ""}`} 
-            onClick={() => setActiveSection("orders")}
-          >
-            <span className="material-symbols-outlined">package_2</span> My Orders
-          </button>
-
-          <button 
-            className={`tab-btn ${activeSection === "comments" ? "active" : ""}`} 
-            onClick={() => setActiveSection("comments")}
-          >
-            <span className="material-symbols-outlined">chat_bubble</span> My Reviews
-          </button>
+        {/* MAIN CONTENT */}
+        <main className="profile-body">
+          <nav className="modern-tabs">
+            <button 
+              className={`tab-btn ${activeSection === "orders" ? "active" : ""}`} 
+              onClick={() => setActiveSection("orders")}
+            >
+              <span className="material-symbols-outlined">package_2</span> My Orders
+            </button>
+            <button 
+              className={`tab-btn ${activeSection === "comments" ? "active" : ""}`} 
+              onClick={() => setActiveSection("comments")}
+            >
+              <span className="material-symbols-outlined">chat_bubble</span> My Reviews
+            </button>
           </nav>
 
-            <section className="section-content">
-              {activeSection === "orders" && <Orders />}
-              {activeSection === "comments" && <Comments />}
-            </section>
-          </main>
+          <section className="section-content">
+            {activeSection === "orders" && <Orders />}
+            {/* FIX: pass reviews prop */}
+            {activeSection === "comments" && <Comments reviews={userStats.reviews} />}
+          </section>
+        </main>
       </div>
     </Container>
   );
