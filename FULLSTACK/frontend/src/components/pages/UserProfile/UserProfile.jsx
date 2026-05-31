@@ -3,26 +3,37 @@ import "../../styles.css";
 import React, { useState, useContext, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../../server/firebase.js"; 
+
+// --- FIREBASE IMPORTS ---
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { ProductContext } from "../../../Context.jsx";
 
+// --- SUB-COMPONENTS ---
 import Orders from "./bar/Orders.jsx";
 import Comments from "./bar/Comments.jsx";
 
+// --- UI COMPONENTS & ASSETS ---
 import Container from "react-bootstrap/Container";
 import NoneAvatarImg from "./none_avatar.jpg";
 
+/**
+ * UserProfile Component
+ * Manages user personal data (address, contacts) and displays activity (orders, reviews).
+ */
 function UserProfile() {
   const navigate = useNavigate();
   const contextData = useContext(ProductContext);
 
+  // Memoize products to avoid unnecessary re-calculations of statistics
   const products = useMemo(() => contextData?.products || [], [contextData]);
 
+  // --- COMPONENT STATE ---
   const [username, setUsername] = useState("User");
   const [currentUser, setCurrentUser] = useState(null);
-  const [activeSection, setActiveSection] = useState("orders");
+  const [activeSection, setActiveSection] = useState("orders"); // Toggle between 'orders' and 'comments'
   
+  // Address State
   const [address, setAddress] = useState("Add delivery address");
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [addressDetails, setAddressDetails] = useState({
@@ -34,6 +45,7 @@ function UserProfile() {
     apartment: ""
   });
   
+  // Contact State
   const [showContactModal, setShowContactModal] = useState(false);
   const [contactDetails, setContactDetails] = useState({
     firstName: "",
@@ -42,17 +54,20 @@ function UserProfile() {
     email: ""
   });
 
-
+  // --- AUTHENTICATION & DATA FETCHING ---
   useEffect(() => {
+    // Listen for login/logout events
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user);
         
         try {
+          // Fetch additional user data from Firestore using the user's UID
           const userDoc = await getDoc(doc(db, "users", user.uid));
           if (userDoc.exists()) {
             const data = userDoc.data();
 
+            // Sync Address Details
             if (data.addressDetails) {
               setAddressDetails(data.addressDetails);
               const d = data.addressDetails;
@@ -61,6 +76,7 @@ function UserProfile() {
               }
             }
 
+            // Sync Contact Details & Username logic
             if (data.contactDetails) {
               const c = data.contactDetails;
               setContactDetails({
@@ -70,6 +86,7 @@ function UserProfile() {
                 email: c.email || user.email || ""
               });
               
+              // Priority: Firestore Name > Google Display Name > Email Prefix
               const dbName = `${c.firstName || ""} ${c.lastName || ""}`.trim();
               setUsername(dbName || user.displayName || user.email?.split('@')[0] || "User");
             } else {
@@ -80,17 +97,22 @@ function UserProfile() {
           console.error("Firestore error:", err);
         }
       } else {
+        // If no user is logged in, redirect to the login page
         navigate("/login");
       }
     });
     return () => unsubscribe();
   }, [navigate]);
 
+  // --- EVENT HANDLERS ---
+
+  // Generic handler for nested object state updates
   const handleInputChange = (e, setter) => {
     const { name, value } = e.target;
     setter(prev => ({ ...prev, [name]: value }));
   };
 
+  // Save address details to Firestore using 'merge: true' to prevent overwriting other fields
   const handleSaveAddress = async () => {
     if (!currentUser) return;
     try {
@@ -104,6 +126,7 @@ function UserProfile() {
     }
   };
 
+  // Save contact information and update local username state
   const handleSaveContact = async () => {
     if (!currentUser) return;
     try {
@@ -125,9 +148,12 @@ function UserProfile() {
     }
   };
 
+  // --- STATISTICS CALCULATION ---
+  // Filters all products to find reviews left by the current user
   const userStats = useMemo(() => {
     if (!products || !currentUser) return { count: 0, avg: 0, reviews: [] };
     const myReviews = [];
+    
     products.forEach((product) => {
       if (product.reviews && Array.isArray(product.reviews)) {
         const found = product.reviews
@@ -141,8 +167,10 @@ function UserProfile() {
         myReviews.push(...found);
       }
     });
+
     const totalRating = myReviews.reduce((sum, r) => sum + Number(r.rating), 0);
     const average = myReviews.length > 0 ? (totalRating / myReviews.length).toFixed(1) : 0;
+
     return { count: myReviews.length, avg: average, reviews: myReviews };
   }, [products, currentUser]);
 
@@ -150,6 +178,7 @@ function UserProfile() {
     <Container>
       <div className="profile-wrapper">
         
+        {/* --- ADDRESS MODAL --- */}
         {showAddressModal && (
           <div className="address-modal-overlay" onClick={() => setShowAddressModal(false)}>
             <div className="address-modal-content wide" onClick={(e) => e.stopPropagation()}>
@@ -158,28 +187,22 @@ function UserProfile() {
                 <button className="close-btn" onClick={() => setShowAddressModal(false)}>×</button>
               </div>
               <div className="modal-body-grid">
-                <div className="input-group-full">
-                  <label>Country</label>
+                <div className="input-group-full"><label>Country</label>
                   <input name="country" value={addressDetails.country} onChange={(e) => handleInputChange(e, setAddressDetails)} />
                 </div>
-                <div className="input-group-half">
-                  <label>Region</label>
+                <div className="input-group-half"><label>Region</label>
                   <input name="region" value={addressDetails.region} onChange={(e) => handleInputChange(e, setAddressDetails)} />
                 </div>
-                <div className="input-group-half">
-                  <label>City</label>
+                <div className="input-group-half"><label>City</label>
                   <input name="city" value={addressDetails.city} onChange={(e) => handleInputChange(e, setAddressDetails)} />
                 </div>
-                <div className="input-group-full">
-                  <label>Street</label>
+                <div className="input-group-full"><label>Street</label>
                   <input name="street" value={addressDetails.street} onChange={(e) => handleInputChange(e, setAddressDetails)} />
                 </div>
-                <div className="input-group-half">
-                  <label>House</label>
+                <div className="input-group-half"><label>House</label>
                   <input name="house" value={addressDetails.house} onChange={(e) => handleInputChange(e, setAddressDetails)} />
                 </div>
-                <div className="input-group-half">
-                  <label>Apartment</label>
+                <div className="input-group-half"><label>Apartment</label>
                   <input name="apartment" value={addressDetails.apartment} onChange={(e) => handleInputChange(e, setAddressDetails)} />
                 </div>
               </div>
@@ -191,6 +214,7 @@ function UserProfile() {
           </div>
         )}
 
+        {/* --- CONTACT MODAL --- */}
         {showContactModal && (
           <div className="address-modal-overlay" onClick={() => setShowContactModal(false)}>
             <div className="address-modal-content wide" onClick={(e) => e.stopPropagation()}>
@@ -199,16 +223,13 @@ function UserProfile() {
                 <button className="close-btn" onClick={() => setShowContactModal(false)}>×</button>
               </div>
               <div className="modal-body-grid">
-                <div className="input-group-full">
-                  <label>Phone Number</label>
+                <div className="input-group-full"><label>Phone Number</label>
                   <input name="phone" value={contactDetails.phone} onChange={(e) => handleInputChange(e, setContactDetails)} placeholder="+380..." />
                 </div>
-                <div className="input-group-half">
-                  <label>First Name</label>
+                <div className="input-group-half"><label>First Name</label>
                   <input name="firstName" value={contactDetails.firstName} onChange={(e) => handleInputChange(e, setContactDetails)} />
                 </div>
-                <div className="input-group-half">
-                  <label>Last Name</label>
+                <div className="input-group-half"><label>Last Name</label>
                   <input name="lastName" value={contactDetails.lastName} onChange={(e) => handleInputChange(e, setContactDetails)} />
                 </div>
               </div>
@@ -220,6 +241,7 @@ function UserProfile() {
           </div>
         )}
 
+        {/* --- PROFILE HEADER --- */}
         <header className="profile-header">
           <div className="profile-main-info">
             <div className="avatar-container">
@@ -252,20 +274,29 @@ function UserProfile() {
           </div>
         </header>
 
-        <main className="profile-body">
-          <nav className="modern-tabs">
-            <button className={`tab-btn ${activeSection === "orders" ? "active" : ""}`} onClick={() => setActiveSection("orders")}>
-              <span className="material-symbols-outlined">package_2</span> My Orders
-            </button>
-            <button className={`tab-btn ${activeSection === "comments" ? "active" : ""}`} onClick={() => setActiveSection("comments")}>
-              <span className="material-symbols-outlined">chat_bubble</span> My Reviews
-            </button>
+        {/* --- MAIN CONTENT AREA --- */}
+          <main className="profile-body">
+              <nav className="modern-tabs">
+          <button 
+            className={`tab-btn ${activeSection === "orders" ? "active" : ""}`} 
+            onClick={() => setActiveSection("orders")}
+          >
+            <span className="material-symbols-outlined">package_2</span> My Orders
+          </button>
+
+          <button 
+            className={`tab-btn ${activeSection === "comments" ? "active" : ""}`} 
+            onClick={() => setActiveSection("comments")}
+          >
+            <span className="material-symbols-outlined">chat_bubble</span> My Reviews
+          </button>
           </nav>
 
-          <section className="section-content">
-            {activeSection === "orders" ? <Orders /> : <Comments reviews={userStats.reviews} />}
-          </section>
-        </main>
+            <section className="section-content">
+              {activeSection === "orders" && <Orders />}
+              {activeSection === "comments" && <Comments />}
+            </section>
+          </main>
       </div>
     </Container>
   );

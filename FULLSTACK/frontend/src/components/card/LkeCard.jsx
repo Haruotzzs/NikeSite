@@ -74,7 +74,24 @@ function LkeCard() {
                   </div>
                   <h2 id="title" className="card-title">{product.tovarName}</h2>
                   <p id="type">{product.tovarClass}</p>
-                  <p id="card-price" className="card-price">₴{product.price || product.tovarPrice}</p>
+                   {/* --- PRICE & DISCOUNT LOGIC --- */}
+                <p id="card-price" className="card-price">
+                  {product.discount && product.discount > 0 ? (
+                    <>
+                      {/* Old Price (Strikethrough) */}
+                      <span style={{ textDecoration: 'line-through', color: '#999', marginRight: '8px' }}>
+                        ${product.price || product.tovarPrice}
+                      </span>
+                      {/* Calculated Discount Price */}
+                      <span style={{ color: '#e74c3c', fontWeight: 'bold' }}>
+                        ${Math.round((product.price || product.tovarPrice) * (1 - product.discount / 100))}
+                      </span>
+                    </>
+                  ) : (
+                    // Regular Price if no discount exists
+                    <>${product.price || product.tovarPrice}</>
+                  )}
+                </p>
                 </Link>
               </div>
             </Container>

@@ -1,6 +1,7 @@
 import "./log-in.css";
 import "../../styles.css";
 
+// Firebase Authentication imports
 import { auth } from "../../../server/firebase.js";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -8,15 +9,26 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 
+/**
+ * Login Component
+ * Handles user authentication, form validation, and UI feedback.
+ */
 function Login() {
   const navigate = useNavigate();
 
+  // --- State Hooks ---
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Toggles password visibility
+  const [errors, setErrors] = useState({ email: "", password: "" }); // Stores validation messages
+  const [loading, setLoading] = useState(false); // Manages loading state during API calls
 
+  // --- Validation Logic ---
+
+  /**
+   * Validates the email format using regex.
+   * Updates the error state if validation fails.
+   */
   const validateEmail = () => {
     if (!email.trim()) {
       setErrors((prev) => ({ ...prev, email: "Email is required" }));
@@ -27,10 +39,13 @@ function Login() {
       setErrors((prev) => ({ ...prev, email: "Invalid email" }));
       return false;
     }
-    setErrors((prev) => ({ ...prev, email: "" }));
+    setErrors((prev) => ({ ...prev, email: "" })); // Clear error if valid
     return true;
   };
 
+  /**
+   * Validates that the password meets minimum length requirements.
+   */
   const validatePassword = () => {
     if (!password) {
       setErrors((prev) => ({ ...prev, password: "Password is required" }));
@@ -40,19 +55,26 @@ function Login() {
       setErrors((prev) => ({ ...prev, password: "Min 6 characters" }));
       return false;
     }
-    setErrors((prev) => ({ ...prev, password: "" }));
+    setErrors((prev) => ({ ...prev, password: "" })); // Clear error if valid
     return true;
   };
 
-  const succesfullLogin = async (e) => {
-    e.preventDefault();
+  // --- Event Handlers ---
 
+  /**
+   * Handles the form submission.
+   * Prevents default behavior, validates inputs, and attempts Firebase Sign-in.
+   */
+  const succesfullLogin = async (e) => {
+    e.preventDefault(); // Stop the page from refreshing
+
+    // Ensure inputs are valid before proceeding
     if (!validateEmail() || !validatePassword()) return;
 
-    setLoading(true);
+    setLoading(true); // Disable the button and show loading state
 
     try {
-
+      // Firebase authentication call
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
@@ -61,16 +83,18 @@ function Login() {
 
       console.log("Logged in user:", userCredential.user);
 
+      // Redirect user to the profile page upon success
       navigate("/profile");
     } catch (error) {
       console.error("Login error:", error.message);
 
+      // Map Firebase errors to a generic user-friendly message
       setErrors((prev) => ({
         ...prev,
         password: "Invalid email or password"
       }));
     } finally {
-      setLoading(false);
+      setLoading(false); // Re-enable the button regardless of outcome
     }
   };
 
@@ -84,15 +108,18 @@ function Login() {
               <p>Enter your credentials to continue</p>
             </div>
 
+            {/* Login Form */}
             <form className="login-form" noValidate onSubmit={succesfullLogin}>
+              
+              {/* Email Field Group */}
               <div className={`form-group ${errors.email ? "error" : ""}`}>
                 <div className="input-wrapper">
                   <input
                     type="text"
                     id="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onBlur={validateEmail}
+                    onChange={(e) => setEmail(e.target.value)} // Update state on typing
+                    onBlur={validateEmail} // Validate when user clicks away
                     required
                     autoComplete="email"
                   />
@@ -101,9 +128,11 @@ function Login() {
                 <span className="error-message">{errors.email}</span>
               </div>
 
+              {/* Password Field Group */}
               <div className={`form-group ${errors.password ? "error" : ""}`}>
                 <div className="input-wrapper">
                  <input
+                    // Dynamic type change for "Show Password" functionality
                     type={showPassword ? "text" : "password"}
                     id="password"
                     value={password}
@@ -112,6 +141,8 @@ function Login() {
                     required
                   />
                   <label htmlFor="password">Password</label>
+                  
+                  {/* Eye Icon Button for toggling password visibility */}
                   <button
                     type="button"
                     className="password-toggle"
@@ -127,6 +158,7 @@ function Login() {
                 <span className="error-message">{errors.password}</span>
               </div>
 
+              {/* Remember Me and Forgot Password links */}
               <div className="form-options">
                 <div className="remember-wrapper">
                   <input type="checkbox" id="remember" name="remember" />
@@ -134,11 +166,12 @@ function Login() {
                     <span className="checkmark"></span> Remember me
                   </label>
                 </div>
-                <Link to="/forgot-password" className="forgot-password">
+                <Link to="/forgot-password" university className="forgot-password">
                   Forgot password?
                 </Link>
               </div>
 
+              {/* Submit Button with Dynamic Loading Class */}
               <button
                 type="submit"
                 className={`login-btn ${loading ? "loading" : ""}`}

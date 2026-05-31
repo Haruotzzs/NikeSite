@@ -24,12 +24,14 @@ const productSchema = new mongoose.Schema({
     tovarClass: { type: String, required: true },
     price: { type: Number, required: true },
     description: { type: String, required: true },
+    color: { type: String, default: "" },
     sizes: [{ type: String }],
     variants: [{
         id: { type: String, required: true },
         name: { type: String, required: true },
         mainImage: { type: String },
-        price: { type: Number }
+        price: { type: Number },
+        color: { type: String }
     }],
     discount: { type: Number, default: 0, min: 0, max: 100 },
     images: [{
@@ -76,7 +78,6 @@ const upload = multer({
 });
 
 // ===== SUPABASE UPLOAD HELPER =====
-
 const uploadToSupabase = async (file, folder = "products") => {
     const fileExt = file.originalname.split('.').pop();
     const fileName = `${Date.now()}-${Math.floor(Math.random() * 1e9)}.${fileExt}`;
@@ -96,7 +97,7 @@ const uploadToSupabase = async (file, folder = "products") => {
         .getPublicUrl(filePath);
 
     return {
-        filename: filePath, 
+        filename: filePath,
         url: publicUrlData.publicUrl
     };
 };
@@ -106,13 +107,12 @@ const uploadToSupabase = async (file, folder = "products") => {
 // POST: Create a new product with multiple images
 app.post("/api/admin/products", upload.array("images", 10), async (req, res) => {
     try {
-        const { tovarName, tovarClass, price, description, sizes, variants, discount } = req.body;
+        const { tovarName, tovarClass, price, description, color, sizes, variants, discount } = req.body;
 
         if (!req.files || req.files.length === 0) {
             return res.status(400).json({ error: "At least one image is required" });
         }
 
-        // Upload all files to Supabase in parallel
         const uploadPromises = req.files.map(file => uploadToSupabase(file));
         const uploadedImages = await Promise.all(uploadPromises);
 
@@ -121,6 +121,7 @@ app.post("/api/admin/products", upload.array("images", 10), async (req, res) => 
             tovarClass,
             price: Number(price),
             description,
+            color: color || "",
             sizes: sizes ? JSON.parse(sizes) : [],
             variants: variants ? JSON.parse(variants) : [],
             discount: discount ? Number(discount) : 0,
@@ -134,117 +135,143 @@ app.post("/api/admin/products", upload.array("images", 10), async (req, res) => 
     }
 });
 
-
 // GET: Fetch product details for admin
 app.get("/api/admin/products/:id", async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (!product) {
-      return res.status(404).json({ error: "Product not found" });
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ error: "Product not found" });
+        }
+        res.json(product);
+    } catch (error) {
+        res.status(500).json({ error: "Server error" });
     }
-    res.json(product);
-  } catch (error) {
-    res.status(500).json({ error: "Server error" });
-  }
 });
 
 
-
-const deleteFromSupabase = async (filePaths) => {
+// PUT: Update product — correctly merges existing (reordered) + new uploaded images
+app.put("/products", async (req, res) => {
     try {
-        if (!filePaths || filePaths.length === 0) return;
+        const productId = req.params.id;
+        const { tovarName, tovarClass, price, description, color, sizes, variants, discount, existingImages } = req.body;
 
-        const { data, error } = await supabase.storage
-            .from(BUCKET_NAME)
-            .remove(filePaths);
-
-        if (error) {
-            console.error("Помилка видалення з Supabase:", error.message);
-            throw error;
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ error: "Product not found" });
         }
 
-        console.log("Файли успішно видалені з Supabase:", data);
-        return data;
+        // ── STEP 1: Parse the existing image URLs sent by the frontend.
+        // These are already-uploaded images the user kept, in their new order
+        // (reordering on the frontend is reflected here).
+        let keptImageUrls = [];
+        try {
+            keptImageUrls = existingImages ? JSON.parse(existingImages) : [];
+        } catch {
+            keptImageUrls = [];
+        }
+
+        // ── STEP 2: Map kept URLs back to full image objects (filename + url)
+        // so we preserve the Supabase filename for future deletion if needed.
+        const keptImages = keptImageUrls.map(url => {
+            const found = product.images.find(img => img.url === url);
+            // If found in DB, keep the full object; otherwise store url-only fallback
+            return found ? found : { filename: null, url };
+        });
+
+        // ── STEP 3: Find images that were removed by the user and delete them
+        // from Supabase storage to avoid orphaned files.
+        const removedImages = product.images.filter(
+            img => !keptImageUrls.includes(img.url)
+        );
+        if (removedImages.length > 0) {
+            const pathsToDelete = removedImages
+                .map(img => img.filename)
+                .filter(Boolean); // skip any without a stored filename
+            if (pathsToDelete.length > 0) {
+                await supabase.storage.from(BUCKET_NAME).remove(pathsToDelete);
+            }
+        }
+
+        // ── STEP 4: Upload any new files the user added during editing.
+        let newlyUploadedImages = [];
+        if (req.files && req.files.length > 0) {
+            const uploadPromises = req.files.map(file => uploadToSupabase(file));
+            newlyUploadedImages = await Promise.all(uploadPromises);
+        }
+
+        // ── STEP 5: Final image array = kept images (in their new order) + new uploads appended.
+        const finalImages = [...keptImages, ...newlyUploadedImages];
+
+        // ── STEP 6: Update all product fields
+        product.tovarName = tovarName || product.tovarName;
+        product.tovarClass = tovarClass || product.tovarClass;
+        product.price = price ? Number(price) : product.price;
+        product.description = description || product.description;
+        product.color = color !== undefined ? color : product.color;
+        product.sizes = sizes ? JSON.parse(sizes) : product.sizes;
+        product.variants = variants ? JSON.parse(variants) : product.variants;
+        product.discount = discount !== undefined ? Number(discount) : product.discount;
+        product.images = finalImages;
+
+        const updatedProduct = await product.save();
+
+        res.json({
+            message: "Product updated successfully",
+            product: updatedProduct
+        });
+
     } catch (error) {
-        console.error("Системна помилка при видаленні:", error);
+        console.error("Update error:", error);
+        res.status(500).json({ error: error.message });
     }
-};
+});
 
-app.put("/api/admin/products/:id", upload.array("images", 10), async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const { 
-      tovarName, tovarClass, price, description, 
-      sizes, variants, discount, 
-      imageToPrimaryIndex,
-      remainingImages 
-    } = req.body;
+// REVIEWS PUT
+app.put("/products", async (req, res) => {
+    try {
+        const {
+            productId,
+            userId,
+            user,
+            comment,
+            rating
+        } = req.body;
 
-    const product = await Product.findById(productId);
-    if (!product) return res.status(404).json({ error: "Product not found" });
+        // шукаємо продукт по Mongo _id
+        const product = await Product.findById(productId);
 
-    // 1. СПОЧАТКУ ВИДАЛЕННЯ (Фізичне та з масиву)
-    if (remainingImages) {
-      const keptImages = JSON.parse(remainingImages);
-      
-      // Шукаємо файли, які треба видалити з Supabase
-      const imagesToRemove = product.images.filter(
-        oldImg => !keptImages.some(newImg => newImg.filename === oldImg.filename)
-      );
+        if (!product) {
+            return res.status(404).json({
+                error: "Product not found"
+            });
+        }
 
-      if (imagesToRemove.length > 0) {
-        const filePaths = imagesToRemove.map(img => img.filename);
-        await deleteFromSupabase(filePaths); // Викликаємо вашу функцію видалення
-      }
-      
-      // Оновлюємо масив у моделі тими, що залишилися
-      product.images = keptImages;
+        // новий review строго під твою схему
+        const newReview = {
+            userId,
+            user,
+            comment,
+            rating,
+            date: new Date()
+        };
+
+        // додаємо в масив reviews (НЕ змінює структуру документа)
+        product.reviews.push(newReview);
+
+        await product.save();
+
+        res.status(200).json({
+            message: "Review added successfully",
+            reviews: product.reviews
+        });
+
+    } catch (error) {
+        console.error("Review error:", error);
+
+        res.status(500).json({
+            error: error.message
+        });
     }
-
-    // 2. ПОТІМ ДОДАВАННЯ НОВИХ (Якщо є)
-    if (req.files && req.files.length > 0) {
-      const uploadPromises = req.files.map(file => uploadToSupabase(file));
-      const uploadedImages = await Promise.all(uploadPromises);
-      
-      // Використовуємо поширення, щоб додати нові об'єкти {filename, url}
-      product.images.push(...uploadedImages);
-    }
-
-    // 3. ОНОВЛЕННЯ ТЕКСТОВИХ ПОЛІВ
-    if (tovarName) product.tovarName = tovarName;
-    if (tovarClass) product.tovarClass = tovarClass;
-    if (price) product.price = Number(price);
-    if (description) product.description = description;
-    if (discount !== undefined) product.discount = Number(discount);
-    
-    if (sizes) product.sizes = typeof sizes === "string" ? JSON.parse(sizes) : sizes;
-    if (variants) product.variants = typeof variants === "string" ? JSON.parse(variants) : variants;
-
-    // 4. СОРТУВАННЯ (Після того, як масив зібрав усі старі та нові фото)
-    if (imageToPrimaryIndex !== undefined && imageToPrimaryIndex !== "") {
-      const idx = parseInt(imageToPrimaryIndex);
-      
-      if (!isNaN(idx) && idx >= 0 && idx < product.images.length) {
-        const [movedImage] = product.images.splice(idx, 1);
-        product.images.unshift(movedImage);
-        
-        // Повідомляємо Mongoose, що масив змінено, інакше сортування може не зберегтися
-        product.markModified('images');
-      }
-    }
-
-    // 5. ЗБЕРЕЖЕННЯ
-    const updatedProduct = await product.save();
-
-    res.json({ 
-      message: "Product updated successfully!", 
-      product: updatedProduct 
-    });
-
-  } catch (error) {
-    console.error("Update error:", error);
-    res.status(500).json({ error: error.message || "Internal Server Error" });
-  }
 });
 
 // DELETE: Remove product and clean up images in Supabase
@@ -253,8 +280,7 @@ app.delete("/api/admin/products/:id", async (req, res) => {
         const product = await Product.findById(req.params.id);
         if (!product) return res.status(404).json({ error: "Product not found" });
 
-        // Extract filenames/paths for Supabase deletion
-        const filePaths = product.images.map(img => img.filename);
+        const filePaths = product.images.map(img => img.filename).filter(Boolean);
         if (filePaths.length > 0) {
             await supabase.storage.from(BUCKET_NAME).remove(filePaths);
         }
@@ -298,45 +324,6 @@ app.get("/products", async (req, res) => {
     }
 });
 
-// POST: Add review to a  product
-app.post("/products/:id/review", async (req, res) => {
-    try {
-        const { userId, user, comment, rating } = req.body;
-        const product = await Product.findById(req.params.id);
-        if (!product) return res.status(404).json({ error: "Product not found" });
-
-        product.reviews.push({ userId, user, comment, rating: Number(rating) });
-        await product.save();
-        res.status(201).json({ message: "Review added" });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// ===== USER AVATAR (Base64 to Supabase) =====
-app.post("/api/upload-avatar", async (req, res) => {
-    try {
-        const { userId, image } = req.body; // Expects base64 data url
-        if (!image) return res.status(400).json({ error: "No image data provided" });
-
-        const matches = image.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
-        const contentType = matches[1];
-        const buffer = Buffer.from(matches[2], "base64");
-        const fileName = `avatars/user-${userId}-${Date.now()}.png`;
-
-        const { data, error } = await supabase.storage
-            .from(BUCKET_NAME)
-            .upload(fileName, buffer, { contentType, upsert: true });
-
-        if (error) throw error;
-
-        const { data: urlData } = supabase.storage.from(BUCKET_NAME).getPublicUrl(fileName);
-        res.json({ url: urlData.publicUrl });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
 // ===== DISCOUNT MANAGEMENT =====
 app.post("/api/admin/discounts", async (req, res) => {
     try {
@@ -358,22 +345,16 @@ app.get("/api/admin/discounts", async (req, res) => {
 });
 
 // ===== SERVER INITIALIZATION =====
-
 const start = async () => {
     try {
-        // 1. Connect to MongoDB
         await mongoose.connect(process.env.MONGO_URI);
         console.log("Database Connected: MongoDB");
 
-        // 2. Check Supabase Connection
-        // We try to list buckets to verify if the SUPABASE_KEY and URL are correct
         const { data: buckets, error: storageError } = await supabase.storage.listBuckets();
-        
         if (storageError) {
             throw new Error(`Supabase Storage error: ${storageError.message}`);
         }
 
-        // Check if our specific bucket exists
         const bucketExists = buckets.find(b => b.name === BUCKET_NAME);
         if (!bucketExists) {
             console.warn(`Warning: Bucket "${BUCKET_NAME}" not found. Please create it in Supabase dashboard.`);
@@ -381,18 +362,17 @@ const start = async () => {
             console.log(`Supabase Connected: Bucket "${BUCKET_NAME}" is ready.`);
         }
 
-        // 3. Start Express Server
         app.listen(PORT, () => {
             console.log(`Server running on: http://localhost:${PORT}`);
             console.log(`Ready to receive requests`);
         });
     } catch (error) {
         console.error("Startup Error:", error.message);
-        process.exit(1); // Stop the process if connection fails
+        process.exit(1);
     }
 };
 
-// Global Error Handler for Multer and General Errors
+// Global Error Handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
     if (err instanceof multer.MulterError) {
